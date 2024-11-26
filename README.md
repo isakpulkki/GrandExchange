@@ -1,0 +1,3 @@
+# GrandExchange
+
+This project will be a full-stack marketplace application named GrandExchange built with React and TypeScript. It allows users to register, browse, search, and manage items for sale, with features like categorization, sorting, and item removal. An admin role will ensure quality by reviewing and approving listings. The app will be responsive and designed for a seamless user experience.
