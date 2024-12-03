@@ -2,3 +2,9 @@ on:
   push:
     branches:
       - main
+
+null_job:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Do nothing
+        run: echo "This is a null job, no actions performed."
