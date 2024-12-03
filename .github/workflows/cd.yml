@@ -3,8 +3,9 @@ on:
     branches:
       - main
 
+jobs:
 null_job:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Do nothing
-        run: echo "This is a null job, no actions performed."
+  runs-on: ubuntu-20.04
+  steps:
+    - name: Do nothing
+      run: echo "This is a null job, no actions performed."
