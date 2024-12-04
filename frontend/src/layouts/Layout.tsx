@@ -1,15 +1,17 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
+import { Box, Container, CssBaseline } from '@mui/material';
 
 const Layout: React.FC = () => {
   return (
-    <div>
+    <Box>
+      <CssBaseline />
       <NavigationBar />
-      <main>
+      <Container>
         <Outlet />
-      </main>
-    </div>
+      </Container>
+    </Box>
   );
 };
 

@@ -85,8 +85,9 @@ function NavigationBar() {
                 onClick={() => handleCloseNavMenu(item.path)}
                 sx={{
                   color: 'white',
+                  textTransform: 'none',
                   '&:hover': {
-                    backgroundColor: 'primary.light',
+                    backgroundColor: 'primary',
                     color: 'inherit',
                   },
                 }}
