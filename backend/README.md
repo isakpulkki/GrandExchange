@@ -11,4 +11,4 @@ $ npm install
 $ npm run dev
 ```
 
-Once the server is running, you can access the API at port 3000.
+Once the server is running, you can access the API locally at port `3000`.

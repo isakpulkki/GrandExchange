@@ -6,7 +6,7 @@ This project will be a full-stack marketplace application named GrandExchange bu
 
 You can test the application live at [Fly.io](https://grandexchange.fly.dev). 
 
-To run the application locally with Docker, run the following commands after cloning the repository to your local machine. 
+To run the application with Docker, run the following commands after cloning the repository to your local machine. 
 
 ```bash
 # Setup ur your MongoDB URI by filling it after the equation mark
@@ -18,5 +18,4 @@ $ docker build -t grandexchange .
 # Run the Docker container in detached mode, mapped to port 3000
 $ docker run -d -p 127.0.0.1:3000:3000 grandexchange
 ```
-After this, you can access the application locally [here](http://127.0.0.1:3000).
-
+Once the Docker container is running, you can access the application locally at port `3000`.
