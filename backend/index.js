@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const Listing = require('./models/listing');
 
-app.use(express.static('dist'));
+app.use(express.static('../frontend/dist'));
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);
