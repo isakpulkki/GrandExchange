@@ -1,43 +1,84 @@
 const express = require('express');
 const app = express();
-app.use(express.static('../frontend/dist'))
+require('dotenv').config();
 
-let listings = [
-  {
-    id: 1,
-    title: 'Listing 1',
-    description: 'This is a listing.',
-  },
-  {
-    id: 2,
-    title: 'Listing 2',
-    description: 'This is a second listing.',
-  },
-  {
-    id: 3,
-    title: 'Listing 3',
-    description: 'This is a third listing.',
-  },
-  {
-    id: 4,
-    title: 'Listing 4',
-    description: 'This is a fourth listing.',
-  },
-];
+const Listing = require('./models/listing');
 
-app.use(express.json());
+app.use(express.static('dist'));
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'Unknown endpoint.' });
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'Malformatted ID.' });
+  }
+  next(error);
 };
 
+const cors = require('cors');
+
+app.use(cors());
+app.use(express.json());
+
 app.get('/api/listings', (request, response) => {
-  response.json(listings);
+  Listing.find({}).then((listings) => {
+    response.json(listings);
+  });
 });
 
-app.use(unknownEndpoint);
+app.post('/api/listings', (request, response) => {
+  const body = request.body;
 
-const PORT = 3001;
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' });
+  }
+
+  const listing = new Listing({
+    content: body.content,
+    important: body.important || false,
+  });
+
+  listing.save().then((savedNote) => {
+    response.json(savedNote);
+  });
+});
+
+app.get('/api/listings/:id', (request, response, next) => {
+  Listing.findById(request.params.id)
+    .then((listing) => {
+      if (listing) {
+        response.json(listing);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
+});
+
+app.delete('/api/listings/:id', (request, response, next) => {
+  Listing.findByIdAndDelete(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
+});
+
+app.put('/api/listings/:id', (request, response, next) => {
+  const body = request.body;
+  const listing = {
+    title: body.title,
+    content: body.content,
+  };
+
+  Listing.findByIdAndUpdate(request.params.id, listing, { new: true })
+    .then((updatedListing) => {
+      response.json(updatedListing);
+    })
+    .catch((error) => next(error));
+});
+app.use(errorHandler);
+
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`Server running on port ${PORT}.`);
 });
