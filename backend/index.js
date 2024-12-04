@@ -11,17 +11,17 @@ let listings = [
   {
     id: 2,
     title: 'Listing 2',
-    description: 'This is a listing.',
+    description: 'This is a second listing.',
   },
   {
     id: 3,
     title: 'Listing 3',
-    description: 'This is a listing.',
+    description: 'This is a third listing.',
   },
   {
     id: 4,
     title: 'Listing 4',
-    description: 'This is a listing.',
+    description: 'This is a fourth listing.',
   },
 ];
 
