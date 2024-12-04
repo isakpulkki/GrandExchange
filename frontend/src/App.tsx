@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import {
-  BrowserRouter as Router, Routes,
+  BrowserRouter as Router,
+  Routes,
   Route,
   Navigate,
 } from 'react-router-dom';
@@ -25,24 +26,8 @@ declare module '@mui/material/styles' {
 }
 
 const theme = createTheme({
-  colorSchemes: {
-    light: {
-      palette: {
-        primary: { main: '#3B3B3B' },
-        secondary: { main: '#3B3B3B' },
-      },
-    },
-  },
-  typography: {
-    allVariants: {
-      color: 'black',
-    },
-    fontFamily: 'DM Sans, sans-serif',
-    button: {
-      textTransform: 'none',
-      fontFamily: 'DM Sans, sans-serif',
-      letterSpacing: '.1rem',
-    },
+  palette: {
+    mode: 'dark'
   },
 });
 
