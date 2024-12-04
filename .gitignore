@@ -1,5 +1,5 @@
-# Ignore node_modules in the root and frontend directories
 **/node_modules
+.env
 
 # Ignore dist folders in the root and frontend directories
 **/dist
