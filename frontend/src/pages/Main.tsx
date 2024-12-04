@@ -15,7 +15,7 @@ export default function MainPage() {
     const fetchListings = async () => {
       try {
         const response = await fetch(baseUrl);
-        if (!response.ok) throw new Error('Failed to fetch listings');
+        if (!response.ok) throw new Error('Failed to fetch listings.');
         const data = await response.json();
         setListings(data);
       } catch (error) {
