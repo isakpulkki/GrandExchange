@@ -1,24 +1,26 @@
-const config = require('./utils/config');
 const express = require('express');
-const app = express();
 const cors = require('cors');
-const listingsRouter = require('./controllers/listings');
 const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);
+const config = require('./utils/config');
+const listingsRouter = require('./controllers/listings');
+const usersRouter = require('./controllers/users');
+const loginRouter = require('./controllers/login');
+const middleware = require('./utils/middleware');
 
-const url = config.MONGODB_URI;
-console.log('Connecting to MongoDB...');
+const app = express();
+
+mongoose.set('strictQuery', false);
 mongoose
-  .connect(url)
-  .then((result) => {
-    console.log('Connected to MongoDB.');
-  })
-  .catch((error) => {
-    console.log('Error connecting to MongoDB.');
-  });
+  .connect(config.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB.'))
+  .catch(() => console.log('Error connecting to MongoDB.'));
 
 app.use(cors());
 app.use(express.static('../frontend/dist'));
 app.use(express.json());
-app.use('api/listings', listingsRouter);
+app.use(middleware.tokenExtractor);
+app.use('/api/listings', listingsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
+
 module.exports = app;
