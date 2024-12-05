@@ -5,6 +5,7 @@ interface Listing {
   id: number;
   title: string;
   description: string;
+  price: number;
 }
 
 export default function MainPage() {
@@ -19,7 +20,7 @@ export default function MainPage() {
         const data = await response.json();
         setListings(data);
       } catch (error) {
-        console.error('Error fetching listings:', error);
+        console.error('Error fetching listings: ', error);
       }
     };
 
@@ -31,10 +32,22 @@ export default function MainPage() {
       <Typography variant="h4" gutterBottom>
         Listings
       </Typography>
-      {listings.map(({ id, title, description }) => (
-        <Paper key={id} sx={{ padding: 2, marginBottom: 2 }}>
-          <Typography variant="h5">{title}</Typography>
-          <Typography>{description}</Typography>
+      {listings.map(({ id, title, description, price }) => (
+        <Paper
+          key={id}
+          sx={{
+            padding: 2,
+            marginBottom: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div>
+            <Typography variant="h5">{title}</Typography>
+            <Typography>{description}</Typography>
+          </div>
+          <Typography variant="h6">{price} €</Typography>
         </Paper>
       ))}
     </Container>
