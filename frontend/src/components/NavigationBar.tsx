@@ -24,11 +24,25 @@ function NavigationBar() {
     setAnchorElNav(null);
     navigate(path);
   };
-  const navItems = [
-    { label: 'New Listing', path: '/newlisting' },
-    { label: 'Messages', path: '/messages' },
-    { label: 'Log In', path: '/login' },
-  ];
+
+  const token = localStorage.getItem('token');
+
+  let navItems;
+
+  if (token) {
+    navItems = [
+      { label: 'New Listing', path: '/newlisting' },
+      { label: 'Messages', path: '/messages' },
+      { label: 'Log Out', path: '/logout' },
+    ];
+  } else {
+    navItems = [
+      { label: 'New Listing', path: '/newlisting' },
+      { label: 'Messages', path: '/messages' },
+      { label: 'Log In', path: '/login' },
+      { label: 'Register', path: '/register' },
+    ];
+  }
 
   return (
     <AppBar position="static">
@@ -85,7 +99,6 @@ function NavigationBar() {
                 onClick={() => handleCloseNavMenu(item.path)}
                 sx={{
                   color: 'white',
-                  textTransform: 'none',
                   '&:hover': {
                     backgroundColor: 'primary',
                     color: 'inherit',
