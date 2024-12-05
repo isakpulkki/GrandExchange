@@ -1,22 +1,9 @@
 const mongoose = require('mongoose');
 
-mongoose.set('strictQuery', false);
-
-const url = process.env.MONGODB_URI;
-
-console.log('Connecting to MongoDB...');
-mongoose
-  .connect(url)
-  .then((result) => {
-    console.log('Connected to MongoDB.');
-  })
-  .catch((error) => {
-    console.log('Error connecting to MongoDB.');
-  });
-
 const listingShchema = new mongoose.Schema({
   title: String,
-  content: String,
+  description: String,
+  price: String,
 });
 
 listingShchema.set('toJSON', {
