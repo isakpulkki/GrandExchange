@@ -3,7 +3,14 @@ const mongoose = require('mongoose');
 const listingShchema = new mongoose.Schema({
   title: String,
   description: String,
-  price: String,
+  price: {
+    type: Number,
+    set: (value) => parseFloat(value).toFixed(2),
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 listingShchema.set('toJSON', {
