@@ -3,15 +3,6 @@ const jwt = require('jsonwebtoken');
 const usersRouter = require('express').Router();
 const User = require('../models/user');
 
-usersRouter.get('/', async (request, response) => {
-  const users = await User.find({}).populate('listings', {
-    title: 1,
-    description: 1,
-    price: 1,
-  });
-  response.json(users);
-});
-
 usersRouter.post('/', async (request, response) => {
   const { username, password } = request.body;
 
@@ -44,7 +35,7 @@ usersRouter.post('/', async (request, response) => {
     process.env.SECRET
   );
 
-  response.status(200).send({ token, username: savedUser.username });
+  response.status(200).send({ token, user: savedUser.username });
 });
 
 module.exports = usersRouter;

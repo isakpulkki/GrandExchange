@@ -27,7 +27,7 @@ listingsRouter.post(
         title,
         description,
         price,
-        user: user.id,
+        user: user.username,
       });
 
       const savedListing = await listing.save();
@@ -49,7 +49,7 @@ listingsRouter.delete(
     try {
       const listing = await Listing.findById(request.params.id);
 
-      if (listing.user.toString() !== request.user.id.toString()) {
+      if (listing.user.toString() !== request.user.username.toString()) {
         return response
           .status(400)
           .json({ error: 'Invalid user for this listing.' });

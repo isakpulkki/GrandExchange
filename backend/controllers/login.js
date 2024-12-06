@@ -30,7 +30,7 @@ loginRouter.post('/', async (request, response) => {
 
     const token = jwt.sign(userForToken, process.env.SECRET);
 
-    response.status(200).send({ token, username: user.username });
+    response.status(200).send({ token, user: user.username });
   } catch (error) {
     response.status(500).send('An error occurred while logging in.');
   }
