@@ -53,6 +53,7 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="logout" element={<LogoutPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="notexist" element={<NotExistPage />} />
             <Route path="*" element={<Navigate to="/notexist" />} />
           </Route>
         </Routes>
