@@ -1,18 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const config = require('./utils/config');
 const listingsRouter = require('./controllers/listings');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const middleware = require('./utils/middleware');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 
 mongoose.set('strictQuery', false);
 mongoose
-  .connect(config.MONGODB_URI)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB.'))
   .catch(() => console.log('Error connecting to MongoDB.'));
 
