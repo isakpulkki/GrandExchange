@@ -17,9 +17,6 @@ mongoose
 
 app.use(cors());
 app.use(express.static('../frontend/dist'));
-app.get('*', function(req, res) {
-  res.sendFile('../frontend/dist');
-});
 app.use(express.json());
 app.use(middleware.tokenExtractor);
 app.use('/api/listings', listingsRouter);
