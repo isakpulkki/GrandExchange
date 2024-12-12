@@ -13,8 +13,6 @@ import LogoutPage from './pages/Logout';
 import RegisterPage from './pages/Register';
 import NotExistPage from './pages/NotExist';
 import Layout from './layouts/Layout';
-
-// Extending Material UI Theme to include custom properties
 declare module '@mui/material/styles' {
   interface Theme {
     status: {
@@ -28,7 +26,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-// Create the Material UI theme
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -46,16 +43,13 @@ const theme = createTheme({
     },
   },
 });
-
-// Custom hook to check for authentication (e.g., from localStorage)
 const useAuth = () => {
-  // Replace this with actual token-checking logic
   const token = localStorage.getItem('token');
   return token;
 };
 
 const App = () => {
-  const token = useAuth(); // Check if token exists
+  const token = useAuth();
 
   return (
     <ThemeProvider theme={theme}>
@@ -63,12 +57,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
-            {/* Redirect to Login if no token for new listing */}
             <Route
               path="newlisting"
               element={token ? <NewListingPage /> : <Navigate to="/login" />}
             />
-            {/* Redirect to Login if no token for messages */}
             <Route
               path="messages"
               element={token ? <MessagesPage /> : <Navigate to="/login" />}
