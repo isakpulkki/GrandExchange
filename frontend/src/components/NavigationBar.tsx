@@ -37,8 +37,8 @@ function NavigationBar() {
     ];
   } else {
     navItems = [
-      { label: 'New Listing', path: '/newlisting' },
-      { label: 'Messages', path: '/messages' },
+      { label: 'New Listing', path: '/login' },
+      { label: 'Messages', path: '/login' },
       { label: 'Log In', path: '/login' },
       { label: 'Register', path: '/register' },
     ];
