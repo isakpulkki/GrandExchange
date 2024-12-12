@@ -31,14 +31,14 @@ function NavigationBar() {
 
   if (token) {
     navItems = [
+      { label: 'Listings', path: '/' },
       { label: 'New Listing', path: '/newlisting' },
       { label: 'Messages', path: '/messages' },
       { label: 'Log Out', path: '/logout' },
     ];
   } else {
     navItems = [
-      { label: 'New Listing', path: '/newlisting' },
-      { label: 'Messages', path: '/messages' },
+      { label: 'Listings', path: '/' },
       { label: 'Log In', path: '/login' },
       { label: 'Register', path: '/register' },
     ];

@@ -43,28 +43,16 @@ const theme = createTheme({
     },
   },
 });
-const useAuth = () => {
-  const token = localStorage.getItem('token');
-  return token;
-};
 
 const App = () => {
-  const token = useAuth();
-
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
-            <Route
-              path="newlisting"
-              element={token ? <NewListingPage /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="messages"
-              element={token ? <MessagesPage /> : <Navigate to="/login" />}
-            />
+            <Route path="newlisting" element={<NewListingPage />} />
+            <Route path="messages" element={<MessagesPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="logout" element={<LogoutPage />} />
             <Route path="register" element={<RegisterPage />} />
