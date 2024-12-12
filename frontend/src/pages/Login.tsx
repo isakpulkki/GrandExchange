@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AuthForm from '../components/AuthForm';
