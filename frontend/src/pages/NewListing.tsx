@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Typography } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
+import CustomBox from '../components/CustomBox';
 
 export default function NewListing() {
   const [formData, setFormData] = useState({
@@ -64,15 +65,7 @@ export default function NewListing() {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 600,
-        margin: '0 auto',
-        padding: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
+    <CustomBox
     >
       <Typography variant="h4">Add a New Listing</Typography>
       <form onSubmit={handleSubmit}>
@@ -109,6 +102,6 @@ export default function NewListing() {
           {message}
         </Typography>
       )}
-    </Box>
+    </CustomBox>
   );
 }

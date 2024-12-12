@@ -1,8 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import CustomBox from '../components/CustomBox';
 
 export default function Messages() {
   return (
-    <Box
+    <CustomBox
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -13,6 +14,6 @@ export default function Messages() {
       <Typography variant="h6" gutterBottom>
         This feature is coming soon!
       </Typography>
-    </Box>
+    </CustomBox>
   );
 }

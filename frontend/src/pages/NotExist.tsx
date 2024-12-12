@@ -1,8 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import CustomBox from '../components/CustomBox';
 
 export default function NotExist() {
   return (
-    <Box
+    <CustomBox
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -18,6 +19,6 @@ export default function NotExist() {
       <Typography variant="h6" gutterBottom>
         Sorry, the page you're looking for doesn't exist.
       </Typography>
-    </Box>
+    </CustomBox>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import CustomBox from './CustomBox';
 interface AuthFormProps {
   type: 'login' | 'register';
 }
@@ -46,15 +46,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 600,
-        margin: '0 auto',
-        padding: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
+    <CustomBox
     >
       <Typography variant="h5" gutterBottom>
         {type === 'login' ? 'Log In' : 'Register'}
@@ -95,7 +87,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           {type === 'login' ? 'Log In' : 'Register'}
         </Button>
       </form>
-    </Box>
+    </CustomBox>
   );
 };
 
