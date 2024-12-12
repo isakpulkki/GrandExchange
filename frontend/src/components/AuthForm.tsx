@@ -48,7 +48,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   return (
     <Box
       sx={{
-        maxWidth: 400,
+        maxWidth: 600,
         margin: '0 auto',
         padding: 2,
         display: 'flex',
