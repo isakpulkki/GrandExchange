@@ -1,7 +1,11 @@
-import { createTheme } from '@mui/material/styles';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import MainPage from './pages/Main';
-import { ThemeProvider } from '@mui/material/styles';
 import NewListingPage from './pages/NewListing';
 import MessagesPage from './pages/Messages';
 import LoginPage from './pages/Login';
@@ -10,6 +14,7 @@ import RegisterPage from './pages/Register';
 import NotExistPage from './pages/NotExist';
 import Layout from './layouts/Layout';
 
+// Extending Material UI Theme to include custom properties
 declare module '@mui/material/styles' {
   interface Theme {
     status: {
@@ -23,6 +28,7 @@ declare module '@mui/material/styles' {
   }
 }
 
+// Create the Material UI theme
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -41,15 +47,32 @@ const theme = createTheme({
   },
 });
 
-function App() {
+// Custom hook to check for authentication (e.g., from localStorage)
+const useAuth = () => {
+  // Replace this with actual token-checking logic
+  const token = localStorage.getItem('token');
+  return token;
+};
+
+const App = () => {
+  const token = useAuth(); // Check if token exists
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
-            <Route path="newlisting" element={<NewListingPage />} />
-            <Route path="messages" element={<MessagesPage />} />
+            {/* Redirect to Login if no token for new listing */}
+            <Route
+              path="newlisting"
+              element={token ? <NewListingPage /> : <Navigate to="/login" />}
+            />
+            {/* Redirect to Login if no token for messages */}
+            <Route
+              path="messages"
+              element={token ? <MessagesPage /> : <Navigate to="/login" />}
+            />
             <Route path="login" element={<LoginPage />} />
             <Route path="logout" element={<LogoutPage />} />
             <Route path="register" element={<RegisterPage />} />
@@ -60,6 +83,6 @@ function App() {
       </Router>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
