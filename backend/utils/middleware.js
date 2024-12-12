@@ -6,6 +6,7 @@ const tokenExtractor = (request, response, next) => {
   if (token) {
     request.token = token;
   }
+
   next();
 };
 
@@ -13,6 +14,7 @@ const userExtractor = async (request, response, next) => {
   const { token } = request;
 
   if (!token) {
+    console.log('bnii');
     return response.status(401).json({ error: 'Token is missing.' });
   }
 

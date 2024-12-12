@@ -1,6 +1,7 @@
 const listingsRouter = require('express').Router();
 const Listing = require('../models/listing');
 const middleware = require('../utils/middleware');
+const LIMITS = { title: 100, description: 500, price: 10 };
 
 listingsRouter.get('/', async (request, response) => {
   try {
@@ -16,10 +17,22 @@ listingsRouter.post(
   middleware.userExtractor,
   async (request, response) => {
     const { title, description, price } = request.body;
-    const { user } = request;
+    const user = request.user;
 
-    if (!title || !description || !price) {
-      return response.status(400).send('All fields must be filled.');
+    if (
+      !title ||
+      !description ||
+      !price ||
+      title.length > LIMITS.title ||
+      description.length > LIMITS.description ||
+      price.toString().length > LIMITS.price ||
+      !Number.isInteger(price)
+    ) {
+      return response
+        .status(400)
+        .send(
+          'All fields must be filled and within character limits. Price must be a valid integer.'
+        );
     }
 
     try {
@@ -29,12 +42,9 @@ listingsRouter.post(
         price,
         user: user.username,
       });
-
       const savedListing = await listing.save();
-      user.listings.push(savedListing.id);
+      user.listings = user.listings.concat(savedListing.id);
       await user.save();
-
-      await savedListing.populate('user', { username: 1 });
       response.status(201).json(savedListing);
     } catch (error) {
       response.status(500).send('Error saving the listing.');
@@ -62,21 +72,5 @@ listingsRouter.delete(
     }
   }
 );
-
-listingsRouter.put('/:id', async (request, response) => {
-  const { title, description, price } = request.body;
-
-  try {
-    const updatedListing = await Listing.findByIdAndUpdate(
-      request.params.id,
-      { title, description, price },
-      { new: true }
-    ).populate('user', { username: 1 });
-
-    response.json(updatedListing);
-  } catch (error) {
-    response.status(500).send('Error updating the listing.');
-  }
-});
 
 module.exports = listingsRouter;

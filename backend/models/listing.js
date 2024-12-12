@@ -7,10 +7,7 @@ const listingShchema = new mongoose.Schema({
     type: Number,
     set: (value) => parseFloat(value).toFixed(2),
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
+  user: String,
 });
 
 listingShchema.set('toJSON', {
