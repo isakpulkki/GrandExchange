@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router();
 const User = require('../models/user');
+const config = require('../utils/config');
 
 loginRouter.post('/', async (request, response) => {
   const { username, password } = request.body;
@@ -28,9 +29,9 @@ loginRouter.post('/', async (request, response) => {
       id: user.id,
     };
 
-    const token = jwt.sign(userForToken, process.env.SECRET);
+    const token = jwt.sign(userForToken, config.SECRET);
 
-    response.status(200).send({ token, user: user.username });
+    response.status(200).send({ token });
   } catch (error) {
     response.status(500).send('An error occurred while logging in.');
   }
