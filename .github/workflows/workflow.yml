@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    name: Run tests and upload coverage
+    name: Run tests and upload coverage for the backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,6 +15,10 @@ jobs:
 
       - name: Set up Node
         uses: actions/setup-node@v4
+
+      - name: Create .env file in the backend
+        run: echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" > ./backend/.env
+        run: echo "SECRET=${{ secrets.SECRET }}" > ./backend/.env
 
       - name: Install dependencies
         working-directory: ./backend
