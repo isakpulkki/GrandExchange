@@ -9,6 +9,9 @@ $ npm install
 
 # Run the server in developement mode
 $ npm run dev
+
+# Run the tests
+$ npm run test
 ```
 
 Once the server is running, you can access the API locally at port `3000`.
