@@ -1,5 +1,8 @@
 # GrandExchange
 
+[![CI/CD](https://github.com/isakpulkki/GrandExchange/actions/workflows/workflow.yml/badge.svg)](https://github.com/isakpulkki/GrandExchange/actions/workflows/workflow.yml)
+[![Codecov](https://codecov.io/gh/isakpulkki/GrandExchange/graph/badge.svg?token=KB82TVNFTP)](https://codecov.io/gh/isakpulkki/GrandExchange)
+
 This project is a full-stack marketplace application named GrandExchange, built with React, TypeScript, Node.js and MongoDB.
 
 It allows users to register, browse, search, and manage items for sale, featuring categorization, sorting, and item removal. An admin role ensures quality by reviewing and approving listings. The app is responsive and designed for a seamless user experience.

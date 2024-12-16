@@ -5,24 +5,36 @@ on:
 
 jobs:
   test:
-    name: Run tests and upload coverage for the backend
+    name: Run the tests and upload the coverage to Codecov
     runs-on: ubuntu-latest
     steps:
-      steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" > ./backend/.env
-      - run: echo "SECRET=${{ secrets.SECRET }}" >> ./backend/.env
-      - working-directory: ./backend
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+
+      - name: Create .env file in the backend
+        run: echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" > ./backend/.env
+
+      - name: Add SECRET to the .env
+        run: echo "SECRET=${{ secrets.SECRET }}" >> ./backend/.env
+
+      - name: Install dependencies
+        working-directory: ./backend
         run: npm install
-      - working-directory: ./backend
+
+      - name: Run tests
+        working-directory: ./backend
         run: npm run test
-      - uses: codecov/codecov-action@v5
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   deploy:
-    name: Deploy app
+    name: Deploy the app to Fly.io
     runs-on: ubuntu-latest
     concurrency: deploy-group
     steps:
