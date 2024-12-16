@@ -9,9 +9,17 @@ $ npm install
 
 # Run the server in developement mode
 $ npm run dev
+```
+
+To run the tests for the backend, MongoDB URI must be defined for the tests seperately.
+
+```bash
+# Setup ur your MongoDB URI for tests by filling it after the equation mark
+$ echo "TEST_MONGODB_URI=" >> .env
 
 # Run the tests
 $ npm run test
 ```
 
 Once the server is running, you can access the API locally at port `3000`.
+
