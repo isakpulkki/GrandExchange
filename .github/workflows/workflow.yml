@@ -17,9 +17,11 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Install dependencies
+        working-directory: ./backend
         run: npm install
 
       - name: Run tests
+        working-directory: ./backend
         run: npx jest --coverage
 
       - name: Upload results to Codecov
