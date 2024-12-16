@@ -4,21 +4,28 @@ on:
       - main
 
 jobs:
-  coverage:
+  test:
+    name: Run tests and upload coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Node 18
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v4
         with:
-          node-version: 18
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+
       - name: Install dependencies
         run: npm install
-      - name: Run tests and collect coverage
-        run: npm run test
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+
+      - name: Run tests
+        run: npx jest --coverage
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
