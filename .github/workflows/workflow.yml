@@ -18,6 +18,8 @@ jobs:
 
       - name: Create .env file in the backend
         run: echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" > ./backend/.env
+        
+      - name: Add SECRET to the .env
         run: echo "SECRET=${{ secrets.SECRET }}" > ./backend/.env
 
       - name: Install dependencies
