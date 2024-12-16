@@ -1,6 +1,7 @@
 **/node_modules
 .env
 **/docs
+**/coverage
 
 # Ignore dist folders in the root and frontend directories
 **/dist
