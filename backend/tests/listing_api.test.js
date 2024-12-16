@@ -110,7 +110,7 @@ describe('When a listing is added by a new user...', () => {
 
 test('Bad request when adding listing without token.', async () => {
   const newListing = {
-    title: 'Lehmäkirja',
+    title: 'Item 3',
     description: 'This is the third items description.',
     price: 65,
   };
