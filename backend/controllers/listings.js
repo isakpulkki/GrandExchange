@@ -1,7 +1,7 @@
 const listingsRouter = require('express').Router();
 const Listing = require('../models/listing');
 const middleware = require('../utils/middleware');
-const LIMITS = { title: 100, description: 500, price: 10 };
+const config = require('../utils/config');
 
 listingsRouter.get('/', async (request, response) => {
   try {
@@ -19,19 +19,25 @@ listingsRouter.post(
     const { title, description, price } = request.body;
     const user = request.user;
 
+    const { TITLE_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, PRICE_MAX_LENGTH } =
+      config.LISTING_LIMITS;
+
     if (
       !title ||
       !description ||
       !price ||
-      title.length > LIMITS.title ||
-      description.length > LIMITS.description ||
-      price.toString().length > LIMITS.price ||
+      title.length > TITLE_MAX_LENGTH ||
+      description.length > DESCRIPTION_MAX_LENGTH ||
+      price.toString().length > PRICE_MAX_LENGTH ||
       !Number.isInteger(price)
     ) {
       return response
         .status(400)
         .send(
-          'All fields must be filled and within character limits. Price must be a valid integer.'
+          `All fields must be filled and within character limits. 
+          Title cannot exceed ${TITLE_MAX_LENGTH} characters, 
+          Description cannot exceed ${DESCRIPTION_MAX_LENGTH} characters, 
+          and Price must be a valid integer within ${PRICE_MAX_LENGTH} characters.`
         );
     }
 
