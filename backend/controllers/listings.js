@@ -12,6 +12,20 @@ listingsRouter.get('/', async (request, response) => {
   }
 });
 
+listingsRouter.get('/:id', async (request, response) => {
+  try {
+    const listing = await Listing.findById(request.params.id);
+    
+    if (!listing) {
+      return response.status(404).send('Listing not found.');
+    }
+
+    response.json(listing);
+  } catch (error) {
+    response.status(500).send('Error retrieving the listing.');
+  }
+});
+
 listingsRouter.post(
   '/',
   middleware.userExtractor,
