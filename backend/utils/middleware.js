@@ -20,7 +20,12 @@ const userExtractor = async (request, response, next) => {
 
   try {
     const decodedToken = jwt.verify(token, config.SECRET);
-    request.user = await User.findById(decodedToken.id);
+    if (request.method === 'GET') {
+      request.user = await User.findById(decodedToken.id).populate('listings');
+    } else {
+      request.user = await User.findById(decodedToken.id);
+    }
+
     if (!request.user) {
       return response.status(401).json({ error: 'Token is invalid.' });
     }
