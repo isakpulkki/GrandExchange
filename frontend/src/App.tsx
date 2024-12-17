@@ -12,6 +12,7 @@ import LoginPage from './pages/Login';
 import LogoutPage from './pages/Logout';
 import RegisterPage from './pages/Register';
 import NotExistPage from './pages/NotExist';
+import AccountPage from './pages/Account';
 import Layout from './layouts/Layout';
 declare module '@mui/material/styles' {
   interface Theme {
@@ -41,6 +42,18 @@ const theme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          padding: 16,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '100%',
+        },
+      },
+    },
   },
 });
 
@@ -53,6 +66,7 @@ const App = () => {
             <Route index element={<MainPage />} />
             <Route path="newlisting" element={<NewListingPage />} />
             <Route path="messages" element={<MessagesPage />} />
+            <Route path="account" element={<AccountPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="logout" element={<LogoutPage />} />
             <Route path="register" element={<RegisterPage />} />
