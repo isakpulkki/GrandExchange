@@ -10,7 +10,7 @@ export default function NewListing() {
   });
   const [message, setMessage] = useState('');
 
-  const LIMITS = { title: 100, description: 500, price: 10 };
+  const LIMITS = { title: 80, description: 500, price: 10 };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -32,7 +32,7 @@ export default function NewListing() {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      setMessage('You must be logged in to add a listing.');
+      setMessage('You must be logged in to add listings.');
       return;
     }
 
@@ -65,8 +65,7 @@ export default function NewListing() {
   };
 
   return (
-    <CustomBox
-    >
+    <CustomBox>
       <Typography variant="h4">Add a New Listing</Typography>
       <form onSubmit={handleSubmit}>
         {['title', 'description', 'price'].map((field) => (

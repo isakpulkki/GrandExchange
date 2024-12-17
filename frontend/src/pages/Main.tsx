@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Typography, Container, Paper, Box } from '@mui/material';
+import { Typography, Container } from '@mui/material';
+import Listings from '../components/Listings'; // Import the ListingGrid component
 
 interface Listing {
   id: number;
@@ -30,32 +31,16 @@ export default function MainPage() {
 
   return (
     <Container maxWidth="md" sx={{ padding: 4 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{
+          textAlign: 'center',
+        }}
+      >
         Listings
       </Typography>
-      {listings.map(({ id, title, description, price, user }) => (
-        <Paper
-          key={id}
-          sx={{
-            padding: 2,
-            marginBottom: 4,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography variant="h5" gutterBottom>
-              {title}
-            </Typography>
-            <Typography gutterBottom>{description}</Typography>
-            <Typography variant="body2">
-              Added by <span style={{ fontStyle: 'italic' }}>{user}</span>
-            </Typography>
-          </Box>
-          <Typography variant="h6">{price} €</Typography>
-        </Paper>
-      ))}
+      <Listings listings={listings} />
     </Container>
   );
 }

@@ -33,6 +33,7 @@ function NavigationBar() {
     navItems = [
       { label: 'Listings', path: '/' },
       { label: 'New Listing', path: '/newlisting' },
+      { label: 'My Account', path: '/account' },
       { label: 'Messages', path: '/messages' },
       { label: 'Log Out', path: '/logout' },
     ];
