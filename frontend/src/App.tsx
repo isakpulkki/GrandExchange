@@ -13,6 +13,7 @@ import LogoutPage from './pages/Logout';
 import RegisterPage from './pages/Register';
 import NotExistPage from './pages/NotExist';
 import AccountPage from './pages/Account';
+import SingleListing from './pages/SingleListing';
 import Layout from './layouts/Layout';
 declare module '@mui/material/styles' {
   interface Theme {
@@ -32,6 +33,7 @@ const theme = createTheme({
     mode: 'dark',
     primary: {
       main: '#1976d2',
+      light: '#666666',
     },
   },
   components: {
@@ -45,12 +47,11 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          padding: 16,
+          padding: 8,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           alignItems: 'center',
-          height: '100%',
         },
       },
     },
@@ -71,6 +72,7 @@ const App = () => {
             <Route path="logout" element={<LogoutPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="notexist" element={<NotExistPage />} />
+            <Route path="/listings/:id" element={<SingleListing />} />
             <Route path="*" element={<Navigate to="/notexist" />} />
           </Route>
         </Routes>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Typography } from '@mui/material';
+import { TextField, Button, Typography, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomBox from './CustomBox';
+
 interface AuthFormProps {
   type: 'login' | 'register';
 }
@@ -12,10 +13,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // This function updates the state whenever an input value changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value, // Dynamically updating the field
     });
   };
 
@@ -74,8 +76,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           fullWidth
           margin="normal"
           name="password"
-          value={formData.password}
-          onChange={handleChange}
+          value={formData.password}  // Ensure the value is bound to formData.password
+          onChange={handleChange}  // Handle change for password input
         />
         <Button
           variant="contained"
@@ -86,6 +88,32 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           {type === 'login' ? 'Log In' : 'Register'}
         </Button>
       </form>
+
+      <Typography align="center" sx={{ mt: 2 }}>
+        {type === 'login' ? (
+          <>
+            Don’t have an account?{' '}
+            <Link
+              component="button"
+              onClick={() => navigate('/register')}
+              sx={{ cursor: 'pointer' }}
+            >
+              Register here
+            </Link>
+          </>
+        ) : (
+          <>
+            Already have an account?{' '}
+            <Link
+              component="button"
+              onClick={() => navigate('/login')}
+              sx={{ cursor: 'pointer' }}
+            >
+              Log in here
+            </Link>
+          </>
+        )}
+      </Typography>
     </CustomBox>
   );
 };
