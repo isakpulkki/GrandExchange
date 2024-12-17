@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paper, Box, Typography, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 interface ListingProps {
   title: string;
@@ -19,14 +20,46 @@ const Listing: React.FC<ListingProps> = ({
   handleDelete,
   user,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/listings/${id}`);
+  };
+
+  // Handle delete click, prevents navigating
+  const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (handleDelete) {
+      handleDelete(id);
+    }
+  };
+
   return (
-    <Paper>
-      <Box sx={{ flexGrow: 1 }}>
+    <Paper
+      onClick={handleClick}
+      sx={{
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease',
+        '&:hover': {
+          backgroundColor: (theme) => theme.palette.primary.light,
+        },
+        padding: '16px',
+        height: '100%',
+      }}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}
+      >
         <Typography
           variant="h6"
           gutterBottom
           sx={{
-            textAlign: 'center',
             wordWrap: 'break-word',
             wordBreak: 'break-all',
           }}
@@ -36,34 +69,30 @@ const Listing: React.FC<ListingProps> = ({
         <Typography
           gutterBottom
           sx={{
-            textAlign: 'center',
             wordWrap: 'break-word',
             wordBreak: 'break-all',
           }}
         >
-          {description.length > 120
-            ? `${description.substring(0, 120)}...`
+          {description.length > 100
+            ? `${description.substring(0, 100)}...`
             : description}
         </Typography>
-      </Box>
-      <Typography variant="h6" sx={{ textAlign: 'center' }}>
-        {price} €
-      </Typography>
+        <Typography gutterBottom variant="h6" sx={{ fontWeight: 'bold' }}>
+          {price} €
+        </Typography>
 
-      {handleDelete ? (
-        <IconButton onClick={() => handleDelete(id)} sx={{ marginTop: 2 }}>
-          <Delete color="error" />
-        </IconButton>
-      ) : (
-        user && (
-          <Typography
-            variant="body2"
-            sx={{ textAlign: 'center', marginTop: 2 }}
-          >
-            Added by <span style={{ fontStyle: 'italic' }}>{user}</span>
-          </Typography>
-        )
-      )}
+        {handleDelete ? (
+          <IconButton onClick={handleDeleteClick} sx={{ marginTop: 2 }}>
+            <Delete color="error" />
+          </IconButton>
+        ) : (
+          user && (
+            <Typography variant="body2">
+              Added by <span style={{ fontStyle: 'italic' }}>{user}</span>
+            </Typography>
+          )
+        )}
+      </Box>
     </Paper>
   );
 };

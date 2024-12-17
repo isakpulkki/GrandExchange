@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Typography, Container } from '@mui/material';
-import Listings from '../components/Listings'; // Import the ListingGrid component
-
-interface Listing {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  user: string;
-}
+import Listings from '../components/Listings';
+import { Listing } from '../types/listing';
 
 export default function MainPage() {
   const [listings, setListings] = useState<Listing[]>([]);

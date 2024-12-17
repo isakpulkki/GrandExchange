@@ -1,17 +1,10 @@
 import React from 'react';
 import { Grid2, Typography } from '@mui/material';
 import Listing from './Listing';
-
-interface Listings {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  user: string;
-}
+import { Listing as listingType } from '../types/listing';
 
 interface ListingsProps {
-  listings: Listings[];
+  listings: listingType[];
   handleDelete?: (id: number) => void;
 }
 
@@ -37,9 +30,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
           </Grid2>
         ))
       ) : (
-        <Typography variant="h6" gutterBottom sx={{}}>
-          No added listings yet.
-        </Typography>
+        <Typography variant="h6">No added listings yet.</Typography>
       )}
     </Grid2>
   );

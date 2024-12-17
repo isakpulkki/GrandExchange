@@ -13,11 +13,10 @@ interface Listing {
 }
 
 interface UserData {
-  username: string;
   listings: Listing[];
 }
 
-export default function UserProfile() {
+export default function Account() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
