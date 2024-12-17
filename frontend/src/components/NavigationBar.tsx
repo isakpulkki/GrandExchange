@@ -46,7 +46,12 @@ function NavigationBar() {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        maxHeight: '20vh',
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -66,7 +71,6 @@ function NavigationBar() {
           <Box
             sx={{
               display: { xs: 'flex', md: 'none' },
-              justifyContent: 'flex-end',
             }}
           >
             <IconButton onClick={handleOpenNavMenu} color="inherit">
@@ -82,7 +86,7 @@ function NavigationBar() {
                   key={item.label}
                   onClick={() => handleCloseNavMenu(item.path)}
                 >
-                  <Typography textAlign="center">{item.label}</Typography>
+                  {item.label}
                 </MenuItem>
               ))}
             </Menu>
@@ -101,7 +105,7 @@ function NavigationBar() {
                 sx={{
                   color: 'white',
                   '&:hover': {
-                    backgroundColor: 'primary',
+                    backgroundColor: 'primary.light',
                     color: 'inherit',
                   },
                 }}
