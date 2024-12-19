@@ -23,7 +23,7 @@ const Filter: React.FC<FilterProps> = ({
         margin: 2,
       }}
     >
-      <FormControl sx={{ width: '35vh' }}>
+      <FormControl required={newListing} sx={{ width: '35vh' }}>
         <InputLabel>Select a Category</InputLabel>
         <Select
           value={selectedCategory}
