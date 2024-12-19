@@ -3,18 +3,21 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const Listing = require('../models/listing');
+const Category = require('../models/category');
 const User = require('../models/user');
 
 const initialListings = [
   {
     title: 'Item 1',
     description: 'This is the first items description.',
+    category: 'Home and Furniture',
     price: 95,
     user: 'User',
   },
   {
     title: 'Item 2',
     description: 'This is the second items description.',
+    category: 'Home and Furniture',
     price: 45,
     user: 'User',
   },
@@ -22,6 +25,8 @@ const initialListings = [
 
 beforeEach(async () => {
   await Listing.deleteMany({});
+  const category = new Category({ name: 'Home and Furniture' });
+  await category.save();
   await Listing.insertMany(initialListings);
 });
 
@@ -59,6 +64,7 @@ describe('When a listing is added by a new user...', () => {
     const newListing = {
       title: 'Item 3',
       description: 'This is the third items description.',
+      category: 'Home and Furniture',
       price: 65,
     };
     await api
@@ -89,6 +95,7 @@ describe('When a listing is added by a new user...', () => {
     const newListing = {
       title: 'Item 3',
       description: 'This is the third items description.',
+      category: 'Home and Furniture',
       price: 65,
     };
     const listingResponse = await api
@@ -120,6 +127,7 @@ test('Bad request when adding listing without token.', async () => {
 
 afterAll(async () => {
   await Listing.deleteMany({});
+  await Category.deleteMany({});
   await User.deleteMany({});
   await mongoose.connection.close();
 });

@@ -7,6 +7,7 @@ const listingShchema = new mongoose.Schema({
     type: Number,
     set: (value) => parseFloat(value).toFixed(2),
   },
+  category: String,
   user: String,
 });
 

@@ -1,5 +1,6 @@
 const listingsRouter = require('express').Router();
 const Listing = require('../models/listing');
+const Category = require('../models/category');
 const middleware = require('../utils/middleware');
 const config = require('../utils/config');
 
@@ -15,7 +16,7 @@ listingsRouter.get('/', async (request, response) => {
 listingsRouter.get('/:id', async (request, response) => {
   try {
     const listing = await Listing.findById(request.params.id);
-    
+
     if (!listing) {
       return response.status(404).send('Listing not found.');
     }
@@ -30,7 +31,7 @@ listingsRouter.post(
   '/',
   middleware.userExtractor,
   async (request, response) => {
-    const { title, description, price } = request.body;
+    const { title, description, price, category } = request.body;
     const user = request.user;
 
     const { TITLE_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, PRICE_MAX_LENGTH } =
@@ -40,6 +41,7 @@ listingsRouter.post(
       !title ||
       !description ||
       !price ||
+      !category ||
       title.length > TITLE_MAX_LENGTH ||
       description.length > DESCRIPTION_MAX_LENGTH ||
       price.toString().length > PRICE_MAX_LENGTH ||
@@ -47,19 +49,23 @@ listingsRouter.post(
     ) {
       return response
         .status(400)
-        .send(
-          `All fields must be filled and within character limits. 
-          Title cannot exceed ${TITLE_MAX_LENGTH} characters, 
-          Description cannot exceed ${DESCRIPTION_MAX_LENGTH} characters, 
-          and Price must be a valid integer within ${PRICE_MAX_LENGTH} characters.`
-        );
+        .send(`All fields must be filled and within character limits.`);
     }
 
     try {
+      const categories = await Category.find({});
+      const categoryExists = categories.some((cat) => cat.name === category);
+      console.log(category);
+      if (!categoryExists) {
+        return response
+          .status(400)
+          .send(`Category '${category}' does not exist.`);
+      }
       const listing = new Listing({
         title,
         description,
         price,
+        category,
         user: user.username,
       });
       const savedListing = await listing.save();
