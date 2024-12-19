@@ -26,7 +26,6 @@ const Listing: React.FC<ListingProps> = ({
     navigate(`/listings/${id}`);
   };
 
-  // Handle delete click, prevents navigating
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     if (handleDelete) {

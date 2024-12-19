@@ -13,11 +13,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // This function updates the state whenever an input value changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value, // Dynamically updating the field
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -76,8 +75,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
           fullWidth
           margin="normal"
           name="password"
-          value={formData.password}  // Ensure the value is bound to formData.password
-          onChange={handleChange}  // Handle change for password input
+          value={formData.password}
+          onChange={handleChange}
         />
         <Button
           variant="contained"
