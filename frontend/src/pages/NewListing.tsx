@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import CustomBox from '../components/CustomBox';
+import Filter from '../components/Filter';
 
 export default function NewListing() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     price: '',
+    category: '',
   });
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
   const [message, setMessage] = useState('');
 
   const LIMITS = { title: 80, description: 500, price: 10 };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await fetch('/api/categories');
+      const data = await response.json();
+      setCategories(data);
+    };
+    fetchCategories();
+  }, []);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | { name: string; value: string }
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -27,7 +43,7 @@ export default function NewListing() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { title, description, price } = formData;
+    const { title, description, price, category } = formData;
 
     const token = localStorage.getItem('token');
 
@@ -47,12 +63,13 @@ export default function NewListing() {
           title,
           description,
           price: parseInt(price, 10),
+          category,
         }),
       });
 
       if (response.ok) {
         setMessage('Listing submitted successfully! Awaiting admin review.');
-        setFormData({ title: '', description: '', price: '' });
+        setFormData({ title: '', description: '', price: '', category: '' });
       } else {
         const error = await response.json();
         setMessage(
@@ -66,8 +83,18 @@ export default function NewListing() {
 
   return (
     <CustomBox>
-      <Typography variant="h4">Add a New Listing</Typography>
+      <Typography variant="h4" sx={{ marginTop: 2 }}>
+        Add a New Listing
+      </Typography>
       <form onSubmit={handleSubmit}>
+        <Filter
+          categories={categories}
+          selectedCategory={formData.category}
+          newListing={true}
+          onCategoryChange={(category) =>
+            setFormData({ ...formData, category })
+          }
+        />
         {['title', 'description', 'price'].map((field) => (
           <TextField
             key={field}
@@ -89,6 +116,7 @@ export default function NewListing() {
             }`}
           />
         ))}
+
         <Button type="submit" variant="contained" color="primary" fullWidth>
           Submit
         </Button>

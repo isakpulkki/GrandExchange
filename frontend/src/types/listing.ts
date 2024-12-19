@@ -4,4 +4,5 @@ export interface Listing {
     description: string;
     price: number;
     user: string;
+    category: string;
   }

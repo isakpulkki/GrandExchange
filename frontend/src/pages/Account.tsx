@@ -3,14 +3,7 @@ import { Typography, Container } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import { useNavigate } from 'react-router-dom';
 import Listings from '../components/Listings';
-
-interface Listing {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  user: string;
-}
+import { Listing } from '../types/listing'
 
 interface UserData {
   listings: Listing[];
@@ -113,12 +106,13 @@ export default function Account() {
   }
 
   return (
-    <Container maxWidth="md" sx={{ padding: 4 }}>
+    <Container maxWidth="md">
       <Typography
         variant="h4"
         gutterBottom
         sx={{
           textAlign: 'center',
+          marginTop: 2
         }}
       >
         My Listings
