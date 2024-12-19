@@ -23,12 +23,13 @@ export default function MainPage() {
   }, [baseUrl]);
 
   return (
-    <Container maxWidth="md" sx={{ padding: 4 }}>
+    <Container maxWidth="md">
       <Typography
         variant="h4"
         gutterBottom
         sx={{
           textAlign: 'center',
+          marginTop: 2,
         }}
       >
         Listings
