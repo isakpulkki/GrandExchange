@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const listingShchema = new mongoose.Schema({
+const listingSchema = new mongoose.Schema({
   title: String,
   description: String,
   price: {
@@ -9,9 +9,10 @@ const listingShchema = new mongoose.Schema({
   },
   category: String,
   user: String,
+  image: String,
 });
 
-listingShchema.set('toJSON', {
+listingSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -19,4 +20,4 @@ listingShchema.set('toJSON', {
   },
 });
 
-module.exports = mongoose.model('Listing', listingShchema);
+module.exports = mongoose.model('Listing', listingSchema);
