@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const categorySchema = new mongoose.Schema({
-  name: String
+  name: String,
 });
 
 categorySchema.set('toJSON', {
