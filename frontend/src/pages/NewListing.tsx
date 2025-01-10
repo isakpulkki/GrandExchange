@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import Filter from '../components/Filter';
+const LIMITS = { title: 80, description: 500, price: 10 };
+const MAX_IMAGE_SIZE = 20 * 1024 * 1024;
 
 export default function NewListing() {
   const [formData, setFormData] = useState({
@@ -15,9 +17,6 @@ export default function NewListing() {
     []
   );
   const [message, setMessage] = useState('');
-
-  const LIMITS = { title: 80, description: 500, price: 10 };
-
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await fetch('/api/categories');
@@ -46,8 +45,7 @@ export default function NewListing() {
     const file = e.target.files ? e.target.files[0] : null;
 
     if (file) {
-      const MAX_SIZE = 20 * 1024 * 1024;
-      if (file.size > MAX_SIZE) {
+      if (file.size > MAX_IMAGE_SIZE) {
         setMessage('File size exceeds 20Mb. Please upload a smaller image.');
         setImage(null);
       } else {
@@ -79,15 +77,14 @@ export default function NewListing() {
       formData.append('description', description);
       formData.append('price', price);
       formData.append('category', category);
-      formData.append('image', image); // Attach the image to the form data
+      formData.append('image', image);
 
-      // Sending the listing data along with the image in one request
       const response = await fetch('/api/listings', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formData, // Send the form data with image
+        body: formData,
       });
       console.log(response);
       if (response.ok) {
