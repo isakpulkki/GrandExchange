@@ -7,6 +7,7 @@ interface ListingProps {
   title: string;
   description: string;
   price: number;
+  image: string;
   id: number;
   handleDelete?: (id: number) => void;
   user?: string;
@@ -19,6 +20,7 @@ const Listing: React.FC<ListingProps> = ({
   id,
   handleDelete,
   user,
+  image,
 }) => {
   const navigate = useNavigate();
 
@@ -65,6 +67,19 @@ const Listing: React.FC<ListingProps> = ({
         >
           {title}
         </Typography>
+
+        <Box
+          component="img"
+          src={`/api/uploads/${image}`}
+          sx={{
+            width: 'auto',
+            height: '300px',
+            maxWidth: '100%',
+            objectFit: 'contain',
+            marginBottom: '16px',
+            borderRadius: '8px',
+          }}
+        />
         <Typography
           gutterBottom
           sx={{

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Grid2, Typography, Box } from '@mui/material';
 import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
-import Filter from './Filter'; // Import the Filter component
+import Filter from './Filter';
 
 interface ListingsProps {
   listings: listingType[];
   handleDelete?: (id: number) => void;
 }
-
 const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
   const [categories, setCategories] = useState<{ id: number; name: string }[]>(
     []
@@ -49,7 +48,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
       <Grid2 container spacing={2} justifyContent="center">
         {filteredListings.length > 0 ? (
           filteredListings.map(
-            ({ id, title, description, price, user }, index) => (
+            ({ id, title, description, price, image, user }, index) => (
               <Grid2
                 key={id}
                 size={{
@@ -64,6 +63,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
                   id={id}
                   handleDelete={handleDelete}
                   user={user}
+                  image={image}
                 />
               </Grid2>
             )

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import { Listing } from '../types/listing';
 
@@ -59,7 +59,18 @@ const SingleListing = () => {
   }
 
   return (
-    <CustomBox>
+    <Box
+      sx={{
+        maxWidth: 800,
+        margin: '0 auto',
+        padding: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '80vh',
+        textAlign: 'center',
+      }}
+    >
       <Typography
         variant="h4"
         gutterBottom
@@ -70,6 +81,18 @@ const SingleListing = () => {
       >
         {listing.title}
       </Typography>
+      <Box
+        component="img"
+        src={`/api/uploads/${listing.image}`}
+        sx={{
+          width: 'auto',
+          height: '400px',
+          maxWidth: '100%',
+          objectFit: 'contain',
+          marginBottom: '16px',
+          borderRadius: '8px',
+        }}
+      />
       <Typography
         gutterBottom
         sx={{
@@ -86,7 +109,7 @@ const SingleListing = () => {
       <Typography variant="body2" sx={{ textAlign: 'center' }}>
         Added by <span style={{ fontStyle: 'italic' }}>{listing.user}</span>
       </Typography>
-    </CustomBox>
+    </Box>
   );
 };
 
