@@ -10,6 +10,7 @@ export default function NewListing() {
     price: '',
     category: '',
   });
+  const [image, setImage] = useState<File | null>(null);
   const [categories, setCategories] = useState<{ id: number; name: string }[]>(
     []
   );
@@ -41,6 +42,21 @@ export default function NewListing() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+
+    if (file) {
+      const MAX_SIZE = 20 * 1024 * 1024;
+      if (file.size > MAX_SIZE) {
+        setMessage('File size exceeds 20Mb. Please upload a smaller image.');
+        setImage(null);
+      } else {
+        setMessage('');
+        setImage(file);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { title, description, price, category } = formData;
@@ -52,24 +68,37 @@ export default function NewListing() {
       return;
     }
 
+    if (!image) {
+      setMessage('Please upload an image before submitting the listing.');
+      return;
+    }
+
     try {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('price', price);
+      formData.append('category', category);
+      formData.append('image', image); // Attach the image to the form data
+
+      // Sending the listing data along with the image in one request
       const response = await fetch('/api/listings', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          title,
-          description,
-          price: parseInt(price, 10),
-          category,
-        }),
+        body: formData, // Send the form data with image
       });
-
+      console.log(response);
       if (response.ok) {
-        setMessage('Listing submitted successfully! Awaiting admin review.');
-        setFormData({ title: '', description: '', price: '', category: '' });
+        setMessage('Listing submitted successfully!');
+        setFormData({
+          title: '',
+          description: '',
+          price: '',
+          category: '',
+        });
+        setImage(null);
       } else {
         const error = await response.json();
         setMessage(
@@ -116,6 +145,27 @@ export default function NewListing() {
             }`}
           />
         ))}
+
+        <Button variant="contained" component="label">
+          Upload Image
+          <input
+            type="file"
+            accept="image/jpeg, image/png, image/jpg"
+            onChange={handleFileChange}
+            hidden
+            required
+          />
+        </Button>
+        {image && (
+          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+            {image.name}
+          </Typography>
+        )}
+
+        {/* Instructions */}
+        <Typography color="textSecondary" sx={{ padding: 2 }}>
+          Upload an image (JPG, JPEG, or PNG) - Max 20Mb
+        </Typography>
 
         <Button type="submit" variant="contained" color="primary" fullWidth>
           Submit
