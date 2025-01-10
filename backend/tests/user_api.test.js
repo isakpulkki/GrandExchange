@@ -15,7 +15,6 @@ describe('New user is not added if...', () => {
       password: 'Password',
     };
 
-    // First user creation should succeed
     await api
       .post('/api/users')
       .send(newUser)
@@ -27,7 +26,6 @@ describe('New user is not added if...', () => {
       password: 'Password',
     };
 
-    // Second user creation with the same username should fail
     const response = await api.post('/api/users').send(secondUser);
     expect(response.status).toBe(400);
   });

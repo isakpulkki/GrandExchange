@@ -5,7 +5,19 @@ const api = supertest(app);
 const Listing = require('../models/listing');
 const Category = require('../models/category');
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
+const imagePath = path.join(__dirname, 'image.png');
 
+const generateTestImage = (filePath) => {
+  const width = 100;
+  const height = 100;
+  const content = Buffer.alloc(width * height * 3, 255);
+  fs.writeFileSync(filePath, content);
+};
+
+const testImagePath = path.join(__dirname, 'image.png');
+generateTestImage(testImagePath);
 const initialListings = [
   {
     title: 'Item 1',
@@ -13,6 +25,7 @@ const initialListings = [
     category: 'Home and Furniture',
     price: 95,
     user: 'User',
+    image: 'image.png',
   },
   {
     title: 'Item 2',
@@ -20,6 +33,7 @@ const initialListings = [
     category: 'Home and Furniture',
     price: 45,
     user: 'User',
+    image: 'image.png',
   },
 ];
 
@@ -61,21 +75,23 @@ describe('When a listing is added by a new user...', () => {
   });
 
   test('...Length of listings has risen by one.', async () => {
-    const newListing = {
-      title: 'Item 3',
-      description: 'This is the third items description.',
-      category: 'Home and Furniture',
-      price: 65,
-    };
-    await api
-      .post('/api/listings')
-      .send(newListing)
-      .set({ Authorization: token })
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
+    const imagePath = path.join(__dirname, 'image.png');
 
-    const response = await api.get('/api/listings');
-    expect(response.body).toHaveLength(initialListings.length + 1);
+    const response = await api
+      .post('/api/listings')
+      .set({ Authorization: token })
+      .field('title', 'Item 3')
+      .field('description', "This is the third item's description.")
+      .field('category', 'Home and Furniture')
+      .field('price', 65)
+      .attach('image', fs.createReadStream(imagePath));
+    expect(response.status).toBe(201);
+    const listings = await api.get('/api/listings');
+    expect(listings.body).toHaveLength(initialListings.length + 1);
+    await api
+      .delete(`/api/listings/${response.body.id}`)
+      .set({ Authorization: token })
+      .expect(204);
   });
 
   test('...Bad request if title is not set.', async () => {
@@ -92,21 +108,17 @@ describe('When a listing is added by a new user...', () => {
   });
 
   test('...Listing can be removed by ID.', async () => {
-    const newListing = {
-      title: 'Item 3',
-      description: 'This is the third items description.',
-      category: 'Home and Furniture',
-      price: 65,
-    };
-    const listingResponse = await api
+    const response = await api
       .post('/api/listings')
-      .send(newListing)
       .set({ Authorization: token })
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
+      .field('title', 'Item 3')
+      .field('description', "This is the third item's description.")
+      .field('category', 'Home and Furniture')
+      .field('price', 65)
+      .attach('image', fs.createReadStream(imagePath));
 
     await api
-      .delete(`/api/listings/${listingResponse.body.id}`)
+      .delete(`/api/listings/${response.body.id}`)
       .set({ Authorization: token })
       .expect(204);
 
@@ -129,5 +141,12 @@ afterAll(async () => {
   await Listing.deleteMany({});
   await Category.deleteMany({});
   await User.deleteMany({});
+  fs.access(imagePath, fs.constants.F_OK, () => {
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error('Error deleting the file: ', err.message);
+      }
+    });
+  });
   await mongoose.connection.close();
 });
