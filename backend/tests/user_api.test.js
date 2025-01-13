@@ -4,12 +4,12 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 
-describe('New user is not added if...', () => {
+describe('When a new user is added...', () => {
   beforeEach(async () => {
     await User.deleteMany({});
   });
 
-  test('...The username is not unique.', async () => {
+  test('...It fails if the username is not unique.', async () => {
     const newUser = {
       username: 'Userna',
       password: 'Password',
@@ -30,7 +30,7 @@ describe('New user is not added if...', () => {
     expect(response.status).toBe(400);
   });
 
-  test('...The username is not at least three characters long.', async () => {
+  test('...It fails if the username is not at least three characters long.', async () => {
     const newUser = {
       username: 'Us',
       password: 'Password',
@@ -40,7 +40,7 @@ describe('New user is not added if...', () => {
     expect(response.status).toBe(400);
   });
 
-  test('...The password is not at least eight characters long.', async () => {
+  test('...It fails if the password is not at least eight characters long.', async () => {
     const newUser = {
       username: 'Usernam',
       password: 'Passwor',
@@ -48,6 +48,25 @@ describe('New user is not added if...', () => {
 
     const response = await api.post('/api/users').send(newUser);
     expect(response.status).toBe(400);
+  });
+  test('...The user can log in and receive a valid token.', async () => {
+    const newUser = {
+      username: 'User',
+      password: 'Password',
+    };
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+    const loginResponse = await api
+      .post('/api/login')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    // Ensure the response contains a token
+    expect(loginResponse.body.token).toBeDefined();
   });
 });
 
