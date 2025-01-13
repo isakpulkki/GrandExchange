@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import Filter from '../components/Filter';
-import { LIMITS, MAX_IMAGE_SIZE } from '../config/index';  
+import { LIMITS, MAX_IMAGE_SIZE } from '../config/index';
 
 const NewListing = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,9 @@ const NewListing = () => {
     category: '',
   });
   const [image, setImage] = useState<File | null>(null);
-  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -23,10 +25,15 @@ const NewListing = () => {
     fetchCategories();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
-    if (value.length <= LIMITS[name as keyof typeof LIMITS] && (name !== 'price' || /^\d+$/.test(value))) {
+    if (
+      value.length <= LIMITS[name as keyof typeof LIMITS] &&
+      (name !== 'price' || /^\d+$/.test(value))
+    ) {
       setFormData({ ...formData, [name]: value });
       setMessage('');
     }
@@ -36,7 +43,9 @@ const NewListing = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_IMAGE_SIZE) {
-        setMessage('File size exceeds the limit. Please upload a smaller image.');
+        setMessage(
+          'File size exceeds the limit. Please upload a smaller image.'
+        );
         setImage(null);
       } else {
         setImage(file);
@@ -50,11 +59,11 @@ const NewListing = () => {
     const { title, description, price, category } = formData;
     const token = localStorage.getItem('token');
 
-    if (!token ) {
+    if (!token) {
       setMessage('You have to be logged in to submit a new listing.');
       return;
     }
-    if ( !image) {
+    if (!image) {
       setMessage('Image must be set for a new listing.');
       return;
     }
@@ -145,7 +154,10 @@ const NewListing = () => {
       </form>
 
       {message && (
-        <Typography color={message.includes('success') ? 'green' : 'red'}>
+        <Typography
+          sx={{ marginTop: 2 }}
+          color={message.includes('success') ? 'green' : 'red'}
+        >
           {message}
         </Typography>
       )}
