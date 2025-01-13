@@ -56,15 +56,16 @@ const NewListing = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!image) {
+      setMessage('Image must be set for a new listing.');
+      return;
+    }
     const { title, description, price, category } = formData;
     const token = localStorage.getItem('token');
 
     if (!token) {
       setMessage('You have to be logged in to submit a new listing.');
-      return;
-    }
-    if (!image) {
-      setMessage('Image must be set for a new listing.');
       return;
     }
 
@@ -85,7 +86,7 @@ const NewListing = () => {
       if (response.ok) {
         setMessage('Listing submitted successfully!');
         setFormData({ title: '', description: '', price: '', category: '' });
-        setImage(null); 
+        setImage(null);
         (document.getElementById('image-input') as HTMLInputElement).value = '';
       } else {
         const error = await response.json();
@@ -99,6 +100,32 @@ const NewListing = () => {
   return (
     <CustomBox>
       <Typography variant="h4">Add a New Listing</Typography>
+
+      <Button variant="contained" component="label" sx={{marginTop: 2}}>
+        Upload Image
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          hidden
+          required
+          id="image-input"
+        />
+      </Button>
+
+      {image && (
+        <>
+          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+            {image.name}
+          </Typography>
+        </>
+      )}
+
+      {!image && (
+        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+          Upload an image (JPG, JPEG, PNG) - Max 20Mb
+        </Typography>
+      )}
       <form onSubmit={handleSubmit}>
         <Filter
           newListing={true}
@@ -129,30 +156,6 @@ const NewListing = () => {
             }`}
           />
         ))}
-
-        <Button variant="contained" component="label">
-          Upload Image
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            hidden
-            required
-            id="image-input"
-          />
-        </Button>
-
-        {image && (
-          <>
-            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-              {image.name}
-            </Typography>
-          </>
-        )}
-
-        <Typography color="textSecondary" sx={{ padding: 2 }}>
-          Upload an image (JPG, JPEG, PNG) - Max 20Mb
-        </Typography>
 
         <Button type="submit" variant="contained" color="primary" fullWidth>
           Submit
