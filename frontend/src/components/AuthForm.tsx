@@ -9,8 +9,15 @@ interface AuthFormProps {
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState<{
+    username: string;
+    password: string;
+    confirmPassword?: string;
+  }>({
+    username: '',
+    password: '',
+  });
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +29,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const { username, password } = formData;
+    const { username, password, confirmPassword } = formData;
+    if (type === 'register') {
+      if (password !== confirmPassword) {
+        setError('Passwords do not match. Please try again.');
+        return;
+      }
+    }
+
     const url = type === 'login' ? '/api/login' : '/api/users';
     const payload = { username, password };
 
@@ -61,7 +75,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <TextField
           label="Username"
-          variant="outlined"
           fullWidth
           margin="normal"
           name="username"
@@ -71,18 +84,40 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         <TextField
           label="Password"
           type="password"
-          variant="outlined"
           fullWidth
           margin="normal"
           name="password"
           value={formData.password}
           onChange={handleChange}
         />
+        {type === 'register' && (
+          <TextField
+            label="Confirm Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            name="confirmPassword"
+            value={formData.confirmPassword || ''}
+            onChange={handleChange}
+            error={formData.password !== formData.confirmPassword}
+            helperText={
+              formData.password !== formData.confirmPassword
+                ? 'Passwords do not match'
+                : ''
+            }
+          />
+        )}
         <Button
           variant="contained"
           fullWidth
           type="submit"
           sx={{ marginTop: 2 }}
+          disabled={
+            (type === 'register' &&
+              formData.password !== formData.confirmPassword) ||
+            !formData.username ||
+            !formData.password
+          }
         >
           {type === 'login' ? 'Log In' : 'Register'}
         </Button>
