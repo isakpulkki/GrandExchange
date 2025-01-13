@@ -5,7 +5,7 @@ export default function Messages() {
   return (
     <CustomBox
     >
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         This feature is coming soon!
       </Typography>
     </CustomBox>

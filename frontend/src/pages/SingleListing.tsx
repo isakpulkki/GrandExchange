@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import CustomBox from '../components/CustomBox';
+import ImageBox from '../components/ImageBox';
 import { Listing } from '../types/listing';
 
 const SingleListing = () => {
@@ -14,33 +15,27 @@ const SingleListing = () => {
     const fetchListing = async () => {
       try {
         const response = await fetch(`/api/listings/${id}`);
-        if (!response.ok) {
-          throw new Error('Listing not found.');
-        }
+        if (!response.ok) throw new Error('Listing not found.');
         const data: Listing = await response.json();
         setListing(data);
-        setLoading(false);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+      } catch (error) {
+        setError(
+          error instanceof Error ? error.message : 'An unknown error occurred.'
+        );
+      } finally {
         setLoading(false);
       }
     };
     fetchListing();
   }, [id]);
 
-  if (loading) {
+  if (loading)
     return (
       <CustomBox>
         <Typography variant="h6">Loading...</Typography>
       </CustomBox>
     );
-  }
-
-  if (error) {
+  if (error)
     return (
       <CustomBox>
         <Typography variant="h6" color="error">
@@ -48,68 +43,29 @@ const SingleListing = () => {
         </Typography>
       </CustomBox>
     );
-  }
-
-  if (!listing) {
+  if (!listing)
     return (
       <CustomBox>
         <Typography variant="h6">Listing not found.</Typography>
       </CustomBox>
     );
-  }
 
   return (
-    <Box
-      sx={{
-        maxWidth: 800,
-        margin: '0 auto',
-        padding: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        height: '80vh',
-        textAlign: 'center',
-      }}
-    >
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{
-          wordWrap: 'break-word',
-          wordBreak: 'break-all',
-        }}
-      >
+    <CustomBox>
+      <Typography variant="h4" gutterBottom sx={{ wordWrap: 'break-word' }}>
         {listing.title}
       </Typography>
-      <Box
-        component="img"
-        src={`/api/uploads/${listing.image}`}
-        sx={{
-          width: 'auto',
-          height: '400px',
-          maxWidth: '100%',
-          objectFit: 'contain',
-          marginBottom: '16px',
-          borderRadius: '8px',
-        }}
-      />
-      <Typography
-        gutterBottom
-        sx={{
-          wordWrap: 'break-word',
-          wordBreak: 'break-all',
-        }}
-      >
+      <ImageBox image={listing.image} />
+      <Typography gutterBottom sx={{ wordWrap: 'break-word' }}>
         {listing.description}
       </Typography>
-
       <Typography gutterBottom variant="h6" sx={{ fontWeight: 'bold' }}>
         {listing.price} €
       </Typography>
       <Typography variant="body2" sx={{ textAlign: 'center' }}>
         Added by <span style={{ fontStyle: 'italic' }}>{listing.user}</span>
       </Typography>
-    </Box>
+    </CustomBox>
   );
 };
 

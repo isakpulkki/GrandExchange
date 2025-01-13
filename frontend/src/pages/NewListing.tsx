@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import Filter from '../components/Filter';
-const LIMITS = { title: 80, description: 500, price: 10 };
-const MAX_IMAGE_SIZE = 20 * 1024 * 1024;
+import { LIMITS, MAX_IMAGE_SIZE } from '../config/index';  
 
-export default function NewListing() {
+const NewListing = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -13,44 +12,35 @@ export default function NewListing() {
     category: '',
   });
   const [image, setImage] = useState<File | null>(null);
-  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
-    []
-  );
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [message, setMessage] = useState('');
+
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await fetch('/api/categories');
-      const data = await response.json();
-      setCategories(data);
+      setCategories(await response.json());
     };
     fetchCategories();
   }, []);
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | { name: string; value: string }
-    >
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
-    if (value.length > LIMITS[name as keyof typeof LIMITS]) return;
-
-    if (name === 'price' && value && !/^\d+$/.test(value)) return;
-
-    setMessage('');
-    setFormData({ ...formData, [name]: value });
+    if (value.length <= LIMITS[name as keyof typeof LIMITS] && (name !== 'price' || /^\d+$/.test(value))) {
+      setFormData({ ...formData, [name]: value });
+      setMessage('');
+    }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_IMAGE_SIZE) {
-        setMessage('File size exceeds 20Mb. Please upload a smaller image.');
+        setMessage('File size exceeds the limit. Please upload a smaller image.');
         setImage(null);
       } else {
-        setMessage('');
         setImage(file);
+        setMessage('');
       }
     }
   };
@@ -58,65 +48,51 @@ export default function NewListing() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { title, description, price, category } = formData;
-
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      setMessage('You must be logged in to add listings.');
+    if (!token ) {
+      setMessage('You have to be logged in to submit a new listing.');
       return;
     }
-
-    if (!image) {
-      setMessage('Please upload an image before submitting the listing.');
+    if ( !image) {
+      setMessage('Image must be set for a new listing.');
       return;
     }
 
     try {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('description', description);
-      formData.append('price', price);
-      formData.append('category', category);
-      formData.append('image', image);
+      const formDataToSubmit = new FormData();
+      formDataToSubmit.append('title', title);
+      formDataToSubmit.append('description', description);
+      formDataToSubmit.append('price', price);
+      formDataToSubmit.append('category', category);
+      formDataToSubmit.append('image', image);
 
       const response = await fetch('/api/listings', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
+        headers: { Authorization: `Bearer ${token}` },
+        body: formDataToSubmit,
       });
-      console.log(response);
+
       if (response.ok) {
         setMessage('Listing submitted successfully!');
-        setFormData({
-          title: '',
-          description: '',
-          price: '',
-          category: '',
-        });
+        setFormData({ title: '', description: '', price: '', category: '' });
         setImage(null);
       } else {
         const error = await response.json();
-        setMessage(
-          error.message || 'Failed to add the listing. Please try again.'
-        );
+        setMessage(error.message || 'Failed to add listing.');
       }
     } catch {
-      setMessage('An unexpected error occurred. Please try again.');
+      setMessage('An unexpected error occurred.');
     }
   };
 
   return (
     <CustomBox>
-      <Typography variant="h4" sx={{ marginTop: 2 }}>
-        Add a New Listing
-      </Typography>
+      <Typography variant="h4">Add a New Listing</Typography>
       <form onSubmit={handleSubmit}>
         <Filter
           categories={categories}
           selectedCategory={formData.category}
-          newListing={true}
           onCategoryChange={(category) =>
             setFormData({ ...formData, category })
           }
@@ -147,35 +123,34 @@ export default function NewListing() {
           Upload Image
           <input
             type="file"
-            accept="image/jpeg, image/png, image/jpg"
-            onChange={handleFileChange}
+            accept="image/*"
+            onChange={handleImageChange}
             hidden
             required
           />
         </Button>
+
         {image && (
           <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
             {image.name}
           </Typography>
         )}
-
-        {/* Instructions */}
         <Typography color="textSecondary" sx={{ padding: 2 }}>
-          Upload an image (JPG, JPEG, or PNG) - Max 20Mb
+          Upload an image (JPG, JPEG, PNG) - Max 20Mb
         </Typography>
 
         <Button type="submit" variant="contained" color="primary" fullWidth>
           Submit
         </Button>
       </form>
+
       {message && (
-        <Typography
-          sx={{ mt: 2 }}
-          color={message.includes('success') ? 'green' : 'red'}
-        >
+        <Typography color={message.includes('success') ? 'green' : 'red'}>
           {message}
         </Typography>
       )}
     </CustomBox>
   );
-}
+};
+
+export default NewListing;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid2, Typography, Box } from '@mui/material';
+import { Grid2, Typography } from '@mui/material';
 import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
 import Filter from './Filter';
@@ -36,7 +36,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
   }, [selectedCategory, listings]);
 
   return (
-    <Box>
+    <div>
       {/* Show the filter component if this is not the 'My Account' -page. */}
       {!handleDelete && (
         <Filter
@@ -45,7 +45,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
           onCategoryChange={setSelectedCategory}
         />
       )}
-      <Grid2 container spacing={2} justifyContent="center">
+      <Grid2 container spacing={2} justifyContent="center" sx={{marginTop: 2}}>
         {filteredListings.length > 0 ? (
           filteredListings.map(
             ({ id, title, description, price, image, user }, index) => (
@@ -72,7 +72,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
           <Typography variant="h6">No added listings yet.</Typography>
         )}
       </Grid2>
-    </Box>
+    </div>
   );
 };
 

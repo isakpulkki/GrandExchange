@@ -1,5 +1,6 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import CustomBox from './CustomBox';
 
 interface FilterProps {
   categories: { id: number; name: string }[];
@@ -15,15 +16,9 @@ const Filter: React.FC<FilterProps> = ({
   newListing = false,
 }) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        margin: 2,
-      }}
+    <CustomBox
     >
-      <FormControl required={newListing} sx={{ width: '35vh' }}>
+      <FormControl required={newListing} sx={{ width: '250px' }}>
         <InputLabel>Select a Category</InputLabel>
         <Select
           value={selectedCategory}
@@ -56,7 +51,7 @@ const Filter: React.FC<FilterProps> = ({
           ))}
         </Select>
       </FormControl>
-    </Box>
+    </CustomBox>
   );
 };
 

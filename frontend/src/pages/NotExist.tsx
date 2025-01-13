@@ -3,8 +3,7 @@ import CustomBox from '../components/CustomBox';
 
 export default function NotExist() {
   return (
-    <CustomBox
-    >
+    <CustomBox>
       <Typography variant="h3" gutterBottom>
         Page Not Found
       </Typography>

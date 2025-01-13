@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Typography, Container } from '@mui/material';
+import { Typography } from '@mui/material';
 import Listings from '../components/Listings';
 import { Listing } from '../types/listing';
+import CustomBox from '../components/CustomBox';
 
 export default function MainPage() {
   const [listings, setListings] = useState<Listing[]>([]);
@@ -23,18 +24,9 @@ export default function MainPage() {
   }, [baseUrl]);
 
   return (
-    <Container maxWidth="md">
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{
-          textAlign: 'center',
-          marginTop: 2,
-        }}
-      >
-        Listings
-      </Typography>
+    <CustomBox>
+      <Typography variant="h4">Listings</Typography>
       <Listings listings={listings} />
-    </Container>
+    </CustomBox>
   );
 }

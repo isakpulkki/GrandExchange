@@ -1,7 +1,9 @@
 import React from 'react';
-import { Paper, Box, Typography, IconButton } from '@mui/material';
+import { Paper, Typography, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import CustomBox from './CustomBox';
+import ImageBox from './ImageBox';
 
 interface ListingProps {
   title: string;
@@ -48,15 +50,7 @@ const Listing: React.FC<ListingProps> = ({
         height: '100%',
       }}
     >
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}
-      >
+      <CustomBox>
         <Typography
           variant="h6"
           gutterBottom
@@ -68,18 +62,7 @@ const Listing: React.FC<ListingProps> = ({
           {title}
         </Typography>
 
-        <Box
-          component="img"
-          src={`/api/uploads/${image}`}
-          sx={{
-            width: 'auto',
-            height: '300px',
-            maxWidth: '100%',
-            objectFit: 'contain',
-            marginBottom: '16px',
-            borderRadius: '8px',
-          }}
-        />
+        <ImageBox image={image} />
         <Typography
           gutterBottom
           sx={{
@@ -97,7 +80,7 @@ const Listing: React.FC<ListingProps> = ({
 
         {handleDelete ? (
           <IconButton onClick={handleDeleteClick} sx={{ marginTop: 2 }}>
-            <Delete color="error" />
+            <Delete color="error" /> <Typography>Delete</Typography>
           </IconButton>
         ) : (
           user && (
@@ -106,7 +89,7 @@ const Listing: React.FC<ListingProps> = ({
             </Typography>
           )
         )}
-      </Box>
+      </CustomBox>
     </Paper>
   );
 };

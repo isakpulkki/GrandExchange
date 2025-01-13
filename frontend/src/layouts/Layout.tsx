@@ -8,7 +8,13 @@ const Layout: React.FC = () => {
     <Box>
       <CssBaseline />
       <NavigationBar />
+      <Box
+        sx={{
+          marginBottom: '5vh',
+        }}
+      >
         <Outlet />
+      </Box>
     </Box>
   );
 };
