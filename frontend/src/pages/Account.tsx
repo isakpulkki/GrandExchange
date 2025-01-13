@@ -119,7 +119,7 @@ export default function Account() {
 
       {message && (
         <Typography
-          sx={{ color: message.type === 'success' ? 'green' : 'red' }}
+          sx={{ color: message.type === 'success' ? 'green' : 'red', marginTop: 2 }}
         >
           {message.text}
         </Typography>
