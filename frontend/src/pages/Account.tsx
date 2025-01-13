@@ -120,11 +120,11 @@ export default function Account() {
 )}
 
       {message && (
-        <Typography
-          sx={{ color: message.type === 'success' ? 'green' : 'red', marginTop: 1 }}
-        >
-          {message.text}
-        </Typography>
+         <Typography
+         color={message.type === 'success' ? 'green' : 'error'}
+       >
+         {message.text}
+       </Typography>
       )}
       <Button
         variant="outlined"

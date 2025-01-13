@@ -165,7 +165,7 @@ const NewListing = () => {
       {message && (
         <Typography
           sx={{ marginTop: 2 }}
-          color={message.includes('success') ? 'green' : 'red'}
+          color={message.includes('success') ? 'green' : 'error'}
         >
           {message}
         </Typography>
