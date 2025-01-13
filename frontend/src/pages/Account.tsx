@@ -116,13 +116,6 @@ export default function Account() {
   return (
     <CustomBox>
       <Typography variant="h4">Hi, {userData?.username}!</Typography>
-      <Button
-        variant="outlined"
-        onClick={() => setShowChangePassword((prev) => !prev)}
-        sx={{ margin: 2 }}
-      >
-        {showChangePassword ? 'Cancel' : 'Change Password'}
-      </Button>
 
       {message && (
         <Typography
@@ -131,20 +124,28 @@ export default function Account() {
           {message.text}
         </Typography>
       )}
+      <Button
+        variant="outlined"
+        onClick={() => setShowChangePassword((prev) => !prev)}
+        sx={{ marginTop: 2 }}
+      >
+        {showChangePassword ? 'Cancel' : 'Change Password'}
+      </Button>
 
       {showChangePassword && (
-        <CustomBox>
+        <div style={{ width: '100%' }}>
           <TextField
+            fullWidth
             label="New Password"
             type="password"
             value={passwords.newPassword}
             onChange={(e) =>
               setPasswords({ ...passwords, newPassword: e.target.value })
             }
-            fullWidth
             margin="normal"
           />
           <TextField
+            fullWidth
             label="Confirm Password"
             type="password"
             value={passwords.confirmPassword}
@@ -157,20 +158,21 @@ export default function Account() {
                 ? 'Passwords do not match'
                 : ''
             }
-            fullWidth
             margin="normal"
           />
           <Button
+            fullWidth
             variant="contained"
             onClick={handleChangePassword}
             disabled={
               !passwords.newPassword ||
               passwords.newPassword !== passwords.confirmPassword
             }
+            sx={{ marginTop: 2 }}
           >
             Change
           </Button>
-        </CustomBox>
+        </div>
       )}
 
       <Typography variant="h5" sx={{ marginTop: 2 }}>

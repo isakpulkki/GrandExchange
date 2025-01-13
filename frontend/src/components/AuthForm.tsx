@@ -16,6 +16,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   }>({
     username: '',
     password: '',
+    confirmPassword: '',
   });
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
