@@ -115,7 +115,9 @@ export default function Account() {
 
   return (
     <CustomBox>
-      <Typography variant="h4">Hi, {userData?.username}!</Typography>
+      {userData && (
+  <Typography variant="h4">Hi, {userData.username}!</Typography>
+)}
 
       {message && (
         <Typography
