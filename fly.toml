@@ -11,7 +11,7 @@ app = "grandexchange"
   min_machines_running = 0
   processes = ["app"]
 
-  [mounts]
+[mounts]
   source = "grandexchange"
-  destination = "/backend/uploads"
+  destination = "/app/backend/uploads"
   processes= ["app"]
