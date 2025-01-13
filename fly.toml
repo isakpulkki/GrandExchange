@@ -14,4 +14,3 @@ app = "grandexchange"
 [mounts]
   source = "grandexchange"
   destination = "/app/backend/uploads"
-  processes= ["app"]
