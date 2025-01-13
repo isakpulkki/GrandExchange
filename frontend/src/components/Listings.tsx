@@ -28,7 +28,6 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
   }, []);
 
   useEffect(() => {
-    setVisibleListings(3);
     if (selectedCategory === 'All') {
       setFilteredListings(listings);
     } else {
@@ -36,9 +35,16 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
         listings.filter((listing) => listing.category === selectedCategory)
       );
     }
+    setVisibleListings(Math.min(3, listings.length));
   }, [selectedCategory, listings]);
+
   const handleShowMore = () => {
-    setVisibleListings((prev) => prev + 4);
+    setVisibleListings((prev) => {
+      const newVisibleListings = prev + 3;
+      return newVisibleListings > filteredListings.length
+        ? filteredListings.length
+        : newVisibleListings;
+    });
   };
 
   return (
@@ -59,14 +65,15 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
       >
         {filteredListings.length > 0 ? (
           filteredListings
-            .slice(0, visibleListings)
+            .slice()
             .reverse()
+            .slice(0, visibleListings)
             .map(({ id, title, description, price, image, user }, index) => (
               <Grid2
                 key={id}
                 size={{
                   xs: 12,
-                  md: filteredListings.length % 2 === 1 && index === 0 ? 12 : 6,
+                  md: visibleListings % 2 === 1 && index === 0 ? 12 : 6,
                 }}
               >
                 <Listing
