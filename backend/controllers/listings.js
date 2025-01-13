@@ -60,7 +60,6 @@ listingsRouter.post(
           .status(400)
           .send(`Category '${category}' does not exist.`);
       }
-      console.log(title);
       const listing = new Listing({
         title,
         description,

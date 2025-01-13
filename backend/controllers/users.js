@@ -12,7 +12,7 @@ usersRouter.get('/', middleware.userExtractor, async (request, response) => {
     if (!username || !listings) {
       return response.status(400).json({ error: 'User data is incomplete.' });
     }
-    response.status(200).json({ listings });
+    response.status(200).json({ username, listings });
   } catch (error) {
     response.status(500).json({ error: 'Internal server error.' });
   }
@@ -55,6 +55,34 @@ usersRouter.post('/', async (request, response) => {
     config.SECRET
   );
   response.status(201).send({ token });
+});
+
+usersRouter.put('/', middleware.userExtractor, async (request, response) => {
+  const { password } = request.body;
+  const { PASSWORD_LIMITS } = config;
+
+  try {
+    const user = request.user;
+    if (!user) {
+      return response.status(401).json({ error: 'Unauthorized.' });
+    }
+
+    if (
+      !password ||
+      password.length < PASSWORD_LIMITS.MIN_LENGTH ||
+      password.length > PASSWORD_LIMITS.MAX_LENGTH
+    ) {
+      return response.status(400).json({
+        error: `Password must be between ${PASSWORD_LIMITS.MIN_LENGTH} and 
+        ${PASSWORD_LIMITS.MAX_LENGTH} characters long.`,
+      });
+    }
+    user.passwordHash = await bcrypt.hash(password, 10);
+    await user.save();
+    response.status(200).json({ message: 'Password updated successfully.' });
+  } catch (error) {
+    response.status(500).json({ error: 'Internal server error.' });
+  }
 });
 
 module.exports = usersRouter;
