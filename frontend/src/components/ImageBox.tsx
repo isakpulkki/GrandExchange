@@ -12,10 +12,10 @@ const ImageBox: React.FC<ImageBoxProps> = ({ image }) => {
       src={`/api/uploads/${image}`}
       sx={{
         width: 'auto',
-        height: '400px',
+        height: '350px',
         maxWidth: '100%',
         objectFit: 'contain',
-        marginBottom: '16px',
+        marginBottom: '12px',
         borderRadius: '8px',
       }}
     />

@@ -46,7 +46,6 @@ const Listing: React.FC<ListingProps> = ({
         '&:hover': {
           backgroundColor: (theme) => theme.palette.primary.light,
         },
-        padding: '16px',
         height: '100%',
       }}
     >
