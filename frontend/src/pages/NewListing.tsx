@@ -85,7 +85,8 @@ const NewListing = () => {
       if (response.ok) {
         setMessage('Listing submitted successfully!');
         setFormData({ title: '', description: '', price: '', category: '' });
-        setImage(null);
+        setImage(null); 
+        (document.getElementById('image-input') as HTMLInputElement).value = '';
       } else {
         const error = await response.json();
         setMessage(error.message || 'Failed to add listing.');
@@ -100,6 +101,7 @@ const NewListing = () => {
       <Typography variant="h4">Add a New Listing</Typography>
       <form onSubmit={handleSubmit}>
         <Filter
+          newListing={true}
           categories={categories}
           selectedCategory={formData.category}
           onCategoryChange={(category) =>
@@ -136,14 +138,18 @@ const NewListing = () => {
             onChange={handleImageChange}
             hidden
             required
+            id="image-input"
           />
         </Button>
 
         {image && (
-          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-            {image.name}
-          </Typography>
+          <>
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+              {image.name}
+            </Typography>
+          </>
         )}
+
         <Typography color="textSecondary" sx={{ padding: 2 }}>
           Upload an image (JPG, JPEG, PNG) - Max 20Mb
         </Typography>

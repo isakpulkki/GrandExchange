@@ -25,7 +25,7 @@ export default function MainPage() {
 
   return (
     <CustomBox>
-      <Typography variant="h4">Listings</Typography>
+      <Typography variant="h4">Recent Listings</Typography>
       <Listings listings={listings} />
     </CustomBox>
   );
