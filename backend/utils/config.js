@@ -22,6 +22,10 @@ const LISTING_LIMITS = {
   PRICE_MAX_LENGTH: 10,
 };
 
+const MESSAGE_LIMITS = {
+  MAX_LENGTH: 280,
+};
+
 const MAX_IMAGE_SIZE = 20 * 1024 * 1024;
 
 module.exports = {
@@ -30,5 +34,6 @@ module.exports = {
   USERNAME_LIMITS,
   PASSWORD_LIMITS,
   LISTING_LIMITS,
+  MESSAGE_LIMITS,
   MAX_IMAGE_SIZE,
 };
