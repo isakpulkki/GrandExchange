@@ -83,7 +83,7 @@ const Listing: React.FC<ListingProps> = ({
 
         {handleDelete ? (
           <IconButton onClick={handleDeleteClick} sx={{ marginTop: 2 }}>
-            <Delete color="error" /> <Typography>Delete</Typography>
+            <Delete color="error" />
           </IconButton>
         ) : (
           user && (
