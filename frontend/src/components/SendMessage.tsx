@@ -69,7 +69,6 @@ const SendMessage = ({ listingUser, token }: SendMessageProps) => {
           >
             register here
           </Link>
-          .
         </Typography>
       ) : (
         <>
