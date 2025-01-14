@@ -49,7 +49,7 @@ function NavigationBar() {
     <AppBar
       position="static"
       sx={{
-        minHeight: '10vh',
+        minHeight: '5vh',
       }}
     >
       <Container maxWidth="xl">
