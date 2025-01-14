@@ -3,28 +3,23 @@ import { useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import ImageBox from '../components/ImageBox';
-import { Listing } from '../types/listing';
+import { Listing as ListingType } from '../types/listing';
+import SendMessage from '../components/SendMessage';
 
-const SingleListing = () => {
+const Listing = () => {
   const { id } = useParams();
-  const [listing, setListing] = useState<Listing | null>(null);
+  const [listing, setListing] = useState<ListingType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchListing = async () => {
-      try {
-        const response = await fetch(`/api/listings/${id}`);
-        if (!response.ok) throw new Error('Listing not found.');
-        const data: Listing = await response.json();
+      const response = await fetch(`/api/listings/${id}`);
+      if (response.ok) {
+        const data: ListingType = await response.json();
         setListing(data);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : 'An unknown error occurred.'
-        );
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchListing();
   }, [id]);
@@ -33,14 +28,6 @@ const SingleListing = () => {
     return (
       <CustomBox>
         <Typography variant="h6">Loading...</Typography>
-      </CustomBox>
-    );
-  if (error)
-    return (
-      <CustomBox>
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
       </CustomBox>
     );
   if (!listing)
@@ -62,11 +49,17 @@ const SingleListing = () => {
       <Typography gutterBottom variant="h6" sx={{ fontWeight: 'bold' }}>
         {listing.price} €
       </Typography>
-      <Typography variant="body2" sx={{ textAlign: 'center' }}>
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        sx={{ textAlign: 'center' }}
+      >
         Added by <span style={{ fontStyle: 'italic' }}>{listing.user}</span>
       </Typography>
+
+      {listing.user && <SendMessage listingUser={listing.user} token={token} />}
     </CustomBox>
   );
 };
 
-export default SingleListing;
+export default Listing;
