@@ -30,10 +30,19 @@ const NewListing = () => {
   ) => {
     const { name, value } = e.target;
 
-    if (
-      value.length <= LIMITS[name as keyof typeof LIMITS] &&
-      (name !== 'price' || /^\d+$/.test(value))
-    ) {
+    if (name === 'price') {
+      if (value.length === 1 && value === '0') {
+        return;
+      }
+      if (/[^0-9]/.test(value)) {
+        return;
+      }
+      setFormData({ ...formData, [name]: value });
+      setMessage('');
+      return;
+    }
+
+    if (value.length <= LIMITS[name as keyof typeof LIMITS]) {
       setFormData({ ...formData, [name]: value });
       setMessage('');
     }
@@ -101,7 +110,7 @@ const NewListing = () => {
     <CustomBox>
       <Typography variant="h4">Add a New Listing</Typography>
 
-      <Button variant="contained" component="label" sx={{marginTop: 2}}>
+      <Button variant="contained" component="label" sx={{ marginTop: 2 }}>
         Upload Image
         <input
           type="file"
@@ -114,11 +123,9 @@ const NewListing = () => {
       </Button>
 
       {image && (
-        <>
-          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-            {image.name}
-          </Typography>
-        </>
+        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+          {image.name}
+        </Typography>
       )}
 
       {!image && (

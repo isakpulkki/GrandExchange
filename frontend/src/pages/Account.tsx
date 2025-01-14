@@ -12,10 +12,7 @@ interface UserData {
 
 export default function Account() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [message, setMessage] = useState<{
-    text: string;
-    type: 'success' | 'error';
-  } | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [passwords, setPasswords] = useState({
     newPassword: '',
     confirmPassword: '',
@@ -23,90 +20,50 @@ export default function Account() {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
+
   const fetchUserData = async () => {
-    const token = localStorage.getItem('token');
     if (!token) return navigate('/login');
-    try {
-      const response = await fetch('/api/users', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch the user data.');
-      }
-      setUserData(await response.json());
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setMessage({ text: error.message, type: 'error' });
-      } else {
-        setMessage({
-          text: 'An unexpected error occurred.',
-          type: 'error',
-        });
-      }
-    }
+    const response = await fetch('/api/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) throw new Error(await response.text());
+    setUserData(await response.json());
   };
 
   const handleDelete = async (id: number) => {
-    const token = localStorage.getItem('token');
-    try {
-      const response = await fetch(`/api/listings/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete the listing.');
-      }
-      setUserData((prev) => ({
-        ...prev!,
-        listings: prev!.listings.filter((listing) => listing.id !== id),
-      }));
-      setMessage({ text: 'Listing deleted successfully.', type: 'success' });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setMessage({ text: error.message, type: 'error' });
-      } else {
-        setMessage({
-          text: 'An unexpected error occurred.',
-          type: 'error',
-        });
-      }
-    }
+    const response = await fetch(`/api/listings/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error(await response.text());
+    setUserData((prev) => ({
+      ...prev!,
+      listings: prev!.listings.filter((listing) => listing.id !== id),
+    }));
+    setMessage('Listing deleted successfully.');
   };
 
   const handleChangePassword = async () => {
-    const { newPassword } = passwords;
-    const token = localStorage.getItem('token');
-    try {
-      const response = await fetch('/api/users', {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password: newPassword }),
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to change the password.');
-      }
-      setPasswords({ newPassword: '', confirmPassword: '' });
-      setShowChangePassword(false);
-      setMessage({ text: 'Password changed successfully.', type: 'success' });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setMessage({ text: error.message, type: 'error' });
-      } else {
-        setMessage({
-          text: 'An unexpected error occurred.',
-          type: 'error',
-        });
-      }
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setMessage('Passwords do not match');
+      return;
     }
+    const response = await fetch('/api/users', {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password: passwords.newPassword }),
+    });
+    if (!response.ok) throw new Error(await response.text());
+    setPasswords({ newPassword: '', confirmPassword: '' });
+    setShowChangePassword(false);
+    setMessage('Password changed successfully.');
   };
 
   useEffect(() => {
@@ -115,24 +72,29 @@ export default function Account() {
 
   return (
     <CustomBox>
-      {userData && (
-  <Typography variant="h4">Hi, {userData.username}!</Typography>
-)}
+      <CustomBox sx={{ alignItems: 'center' }}>
+        {userData && (
+          <Typography variant="h4">Hi, {userData.username}!</Typography>
+        )}
 
-      {message && (
-         <Typography
-         color={message.type === 'success' ? 'green' : 'error'}
-       >
-         {message.text}
-       </Typography>
-      )}
-      <Button
-        variant="outlined"
-        onClick={() => setShowChangePassword((prev) => !prev)}
-        sx={{ marginTop: 2 }}
-      >
-        {showChangePassword ? 'Cancel' : 'Change Password'}
-      </Button>
+        {message && (
+          <Typography
+            color={
+              message.toLowerCase().includes('success') ? 'green' : 'error'
+            }
+          >
+            {message}
+          </Typography>
+        )}
+
+        <Button
+          variant="outlined"
+          onClick={() => setShowChangePassword((prev) => !prev)}
+          sx={{ marginTop: 2 }}
+        >
+          {showChangePassword ? 'Cancel' : 'Change Password'}
+        </Button>
+      </CustomBox>
 
       {showChangePassword && (
         <div style={{ width: '100%' }}>
@@ -142,7 +104,7 @@ export default function Account() {
             type="password"
             value={passwords.newPassword}
             onChange={(e) =>
-              setPasswords({ ...passwords, newPassword: e.target.value })
+              setPasswords((prev) => ({ ...prev, newPassword: e.target.value }))
             }
             margin="normal"
           />
@@ -152,7 +114,10 @@ export default function Account() {
             type="password"
             value={passwords.confirmPassword}
             onChange={(e) =>
-              setPasswords({ ...passwords, confirmPassword: e.target.value })
+              setPasswords((prev) => ({
+                ...prev,
+                confirmPassword: e.target.value,
+              }))
             }
             error={passwords.newPassword !== passwords.confirmPassword}
             helperText={

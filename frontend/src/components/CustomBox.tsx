@@ -15,7 +15,6 @@ const CustomBox: React.FC<CustomBoxProps> = ({ children, sx, ...props }) => {
         padding: 2,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         ...sx,
         textAlign: 'center',
         marginTop: 1,

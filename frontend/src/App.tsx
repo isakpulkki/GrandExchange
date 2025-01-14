@@ -12,8 +12,9 @@ import LoginPage from './pages/Login';
 import LogoutPage from './pages/Logout';
 import RegisterPage from './pages/Register';
 import NotExistPage from './pages/NotExist';
+import MessagePage from './pages/Message';
 import AccountPage from './pages/Account';
-import SingleListing from './pages/SingleListing';
+import Listing from './pages/Listing';
 import Layout from './layouts/Layout';
 declare module '@mui/material/styles' {
   interface Theme {
@@ -61,7 +62,8 @@ const App = () => {
             <Route path="logout" element={<LogoutPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="notexist" element={<NotExistPage />} />
-            <Route path="/listings/:id" element={<SingleListing />} />
+            <Route path="/messages/:participant" element={<MessagePage />} />
+            <Route path="/listings/:id" element={<Listing />} />
             <Route path="*" element={<Navigate to="/notexist" />} />
           </Route>
         </Routes>

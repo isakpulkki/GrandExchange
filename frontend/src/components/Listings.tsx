@@ -3,7 +3,6 @@ import { Grid2, Typography, Button } from '@mui/material';
 import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
 import Filter from './Filter';
-
 interface ListingsProps {
   listings: listingType[];
   handleDelete?: (id: number) => void;
@@ -88,7 +87,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
               </Grid2>
             ))
         ) : (
-          <Typography variant="h6">No added listings yet.</Typography>
+          <Typography color="textSecondary">No added listings yet.</Typography>
         )}
       </Grid2>
 
@@ -98,7 +97,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
           variant="outlined"
           color="primary"
           onClick={handleShowMore}
-          sx={{ marginTop: 2 }}
+          sx={{ margin: 5 }}
         >
           Show More...
         </Button>

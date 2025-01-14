@@ -124,7 +124,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
         </Button>
       </form>
 
-      <Typography align="center" sx={{ mt: 2 }}>
+      <Typography align="center" color="textSecondary" sx={{ mt: 2 }}>
         {type === 'login' ? (
           <>
             Don’t have an account?{' '}

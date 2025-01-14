@@ -41,12 +41,16 @@ const Listing: React.FC<ListingProps> = ({
     <Paper
       onClick={handleClick}
       sx={{
+        flexGrow: 1,
         cursor: 'pointer',
+        height: '100%',
+        width: '100%',
+        textAlign: 'center',
+        padding: 2,
         transition: 'background-color 0.3s ease',
         '&:hover': {
           backgroundColor: (theme) => theme.palette.primary.light,
         },
-        height: '100%',
       }}
     >
       <CustomBox>
@@ -83,7 +87,7 @@ const Listing: React.FC<ListingProps> = ({
           </IconButton>
         ) : (
           user && (
-            <Typography variant="body2">
+            <Typography variant="body2" color="textSecondary">
               Added by <span style={{ fontStyle: 'italic' }}>{user}</span>
             </Typography>
           )

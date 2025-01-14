@@ -17,14 +17,18 @@ const Filter: React.FC<FilterProps> = ({
 }) => {
   return (
     <CustomBox
+      sx={{
+        alignItems: 'center',
+      }}
     >
       <FormControl required={newListing} sx={{ width: '250px' }}>
-        <InputLabel>Select a Category</InputLabel>
+        <InputLabel id="category-label">Select a Category</InputLabel>
         <Select
+          labelId="category-label"
           value={selectedCategory}
           onChange={(e) => onCategoryChange(e.target.value)}
+          label="Select a Category"
         >
-          {/* Don't show the 'All' -option if adding a new listing. */}
           {!newListing && (
             <MenuItem
               value="All"
