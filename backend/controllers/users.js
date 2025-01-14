@@ -18,6 +18,8 @@ usersRouter.get('/', middleware.userExtractor, async (request, response) => {
   }
 });
 
+const validRegex = /^[A-Za-z0-9!"#€%&/()@]+$/;
+
 usersRouter.post('/', async (request, response) => {
   const { username, password } = request.body;
   const { USERNAME_LIMITS, PASSWORD_LIMITS } = config;
@@ -26,6 +28,7 @@ usersRouter.post('/', async (request, response) => {
   if (existingUser) {
     return response.status(400).json({ error: 'Username is not unique.' });
   }
+
   if (
     username.length < USERNAME_LIMITS.MIN_LENGTH ||
     username.length > USERNAME_LIMITS.MAX_LENGTH
@@ -33,6 +36,13 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json({
       error: `Username must be between ${USERNAME_LIMITS.MIN_LENGTH} and 
       ${USERNAME_LIMITS.MAX_LENGTH} characters long.`,
+    });
+  }
+
+  if (!validRegex.test(username)) {
+    return response.status(400).json({
+      error:
+        'Username can only contain letters, numbers, and the following special symbols: !"#€%&/()@.',
     });
   }
 
@@ -46,15 +56,26 @@ usersRouter.post('/', async (request, response) => {
     });
   }
 
+  if (!validRegex.test(password)) {
+    return response.status(400).json({
+      error:
+        'Password can only contain letters, numbers, and the following special symbols: !"#€%&/()@.',
+    });
+  }
+
   const passwordHash = await bcrypt.hash(password, 10);
   const user = new User({ username, passwordHash });
-  const savedUser = await user.save();
 
-  const token = jwt.sign(
-    { username: savedUser.username, id: savedUser.id },
-    config.SECRET
-  );
-  response.status(201).send({ token });
+  try {
+    const savedUser = await user.save();
+    const token = jwt.sign(
+      { username: savedUser.username, id: savedUser.id },
+      config.SECRET
+    );
+    response.status(201).send({ token });
+  } catch (error) {
+    response.status(500).json({ error: 'Internal server error.' });
+  }
 });
 
 usersRouter.put('/', middleware.userExtractor, async (request, response) => {

@@ -22,10 +22,18 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    // Regular expression to allow letters, numbers, and @ symbol, but not spaces or other special characters
+    const regex = /^[A-Za-z0-9!"#€%&/()@]+$/;
+    
+    // Only update state if the value matches the allowed pattern
+    if (regex.test(value) || value === '') {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
