@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Typography, Button, TextField } from '@mui/material';
+import { Typography, Button, TextField, Box } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import { useNavigate } from 'react-router-dom';
 import Listings from '../components/Listings';
@@ -72,7 +72,7 @@ export default function Account() {
 
   return (
     <CustomBox>
-      <CustomBox sx={{ alignItems: 'center' }}>
+      <Box sx={{ alignItems: 'center'}}>
         {userData && (
           <Typography variant="h4">Hi, {userData.username}!</Typography>
         )}
@@ -94,7 +94,7 @@ export default function Account() {
         >
           {showChangePassword ? 'Cancel' : 'Change Password'}
         </Button>
-      </CustomBox>
+      </Box>
 
       {showChangePassword && (
         <div style={{ width: '100%' }}>

@@ -63,7 +63,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
 
   return (
     <CustomBox>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         {type === 'login' ? 'Log In' : 'Register'}
       </Typography>
 

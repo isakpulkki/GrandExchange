@@ -43,7 +43,7 @@ export default function ConversationPage() {
 
   return (
     <CustomBox sx={{ gap: 2 }}>
-      <Typography variant="h5">Conversation with {participant}</Typography>
+      <Typography variant="h4" >Conversation with <i>{participant}</i></Typography>
       {conversation ? (
         <>
           {conversation.messages.map((msg) => (
