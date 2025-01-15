@@ -3,6 +3,8 @@ import { Grid2, Typography, Button } from '@mui/material';
 import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
 import Filter from './Filter';
+import Sort from './Sort';
+
 interface ListingsProps {
   listings: listingType[];
   handleDelete?: (id: number) => void;
@@ -13,6 +15,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
     []
   );
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [sortOption, setSortOption] = useState<string>('newest');
   const [filteredListings, setFilteredListings] =
     useState<listingType[]>(listings);
   const [visibleListings, setVisibleListings] = useState<number>(3);
@@ -27,15 +30,39 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory === 'All') {
-      setFilteredListings(listings);
-    } else {
-      setFilteredListings(
-        listings.filter((listing) => listing.category === selectedCategory)
+    let updatedListings = listings;
+
+    // Filter by category
+    if (selectedCategory !== 'All') {
+      updatedListings = listings.filter(
+        (listing) => listing.category === selectedCategory
       );
     }
-    setVisibleListings(Math.min(3, listings.length));
-  }, [selectedCategory, listings]);
+
+    switch (sortOption) {
+      case 'newest':
+        updatedListings = [...updatedListings].reverse();
+        break;
+      case 'oldest':
+        updatedListings = [...updatedListings];
+        break;
+      case 'lowToHigh':
+        updatedListings = [...updatedListings].sort(
+          (a, b) => a.price - b.price
+        );
+        break;
+      case 'highToLow':
+        updatedListings = [...updatedListings].sort(
+          (a, b) => b.price - a.price
+        );
+        break;
+      default:
+        break;
+    }
+
+    setFilteredListings(updatedListings);
+    setVisibleListings(Math.min(3, updatedListings.length));
+  }, [selectedCategory, listings, sortOption]);
 
   const handleShowMore = () => {
     setVisibleListings((prev) => {
@@ -48,7 +75,8 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
 
   return (
     <div>
-      {/* Show the filter component if this is not the 'My Account' -page. */}
+      {/* Show the filter component if this is not the 'My Account' page. */}
+
       {!handleDelete && (
         <Filter
           categories={categories}
@@ -56,6 +84,9 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
           onCategoryChange={setSelectedCategory}
         />
       )}
+
+      {/* Sorting Component */}
+      {!handleDelete && <Sort value={sortOption} onChange={setSortOption} />}
       <Grid2
         container
         spacing={2}
@@ -64,8 +95,6 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
       >
         {filteredListings.length > 0 ? (
           filteredListings
-            .slice()
-            .reverse()
             .slice(0, visibleListings)
             .map(({ id, title, description, price, image, user }, index) => (
               <Grid2
