@@ -41,6 +41,20 @@ test('User can send a message to a another user.', async () => {
   );
 });
 
+test('User can retrieve their conversations.', async () => {
+  const response = await api
+    .get('/api/messages')
+    .set('Authorization', token1)
+    .expect(200);
+
+  expect(response.body.success).toBe(true);
+  expect(response.body.conversations).toHaveLength(1);
+  expect(response.body.conversations[0].otherParticipant).toBe('Username');
+  expect(response.body.conversations[0].lastMessage.message).toBe(
+    'Hello from User!'
+  );
+});
+
 afterAll(async () => {
   await User.deleteMany({});
   await Conversation.deleteMany({});
