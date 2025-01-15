@@ -5,16 +5,16 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import MainPage from './pages/Main';
-import NewListingPage from './pages/NewListing';
-import MessagesPage from './pages/Messages';
-import LoginPage from './pages/Login';
-import LogoutPage from './pages/Logout';
-import RegisterPage from './pages/Register';
-import NotExistPage from './pages/NotExist';
-import MessagePage from './pages/Message';
-import AccountPage from './pages/Account';
-import Listing from './pages/Listing';
+import ListingsPage from './pages/ListingsPage';
+import NewListingPage from './pages/NewListingPage';
+import MessagesPage from './pages/MessagesPage';
+import LoginPage from './pages/LoginPage';
+import LogoutPage from './pages/LogoutPage';
+import RegisterPage from './pages/RegisterPage';
+import NotExistPage from './pages/NotExistPage';
+import MessagePage from './pages/MessagePage';
+import AccountPage from './pages/AccountPage';
+import Listing from './pages/ListingPage';
 import Layout from './layouts/Layout';
 declare module '@mui/material/styles' {
   interface Theme {
@@ -54,7 +54,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<MainPage />} />
+            <Route index element={<ListingsPage />} />
             <Route path="newlisting" element={<NewListingPage />} />
             <Route path="messages" element={<MessagesPage />} />
             <Route path="account" element={<AccountPage />} />

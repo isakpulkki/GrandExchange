@@ -2,8 +2,8 @@ import React from 'react';
 import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 interface SortProps {
-  value: string; // Current selected value
-  onChange: (value: string) => void; // Function to handle change
+  value: string;
+  onChange: (value: string) => void;
 }
 
 const Sort: React.FC<SortProps> = ({ value, onChange }) => {
@@ -14,7 +14,7 @@ const Sort: React.FC<SortProps> = ({ value, onChange }) => {
         labelId="sort-label"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        label="Sort By" // Ensure the label works properly
+        label="Sort By"
       >
         <MenuItem value="newest">First Added</MenuItem>
         <MenuItem value="oldest">Last Added</MenuItem>

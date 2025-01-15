@@ -4,7 +4,7 @@ import Listings from '../components/Listings';
 import { Listing } from '../types/listing';
 import CustomBox from '../components/CustomBox';
 
-export default function MainPage() {
+export default function ListingsPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const baseUrl = '/api/listings';
 
