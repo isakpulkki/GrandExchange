@@ -31,4 +31,4 @@
 | 15.1. | 4 | Improving the backend, slight frontend adjustments |
 | 15.1. | 2 | Add Sorting functionality for the Listings |
 
-Total work of **117,5 hours**.
+Total work of **119,5 hours**.
