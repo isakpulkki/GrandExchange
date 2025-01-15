@@ -42,7 +42,7 @@ usersRouter.post('/', async (request, response) => {
   if (!validRegex.test(username)) {
     return response.status(400).json({
       error:
-        'Username can only contain letters, numbers, and the following special symbols: !"#€%&/()@.',
+        'Username can only contain letters, numbers, and some special symbols.',
     });
   }
 
@@ -59,7 +59,7 @@ usersRouter.post('/', async (request, response) => {
   if (!validRegex.test(password)) {
     return response.status(400).json({
       error:
-        'Password can only contain letters, numbers, and the following special symbols: !"#€%&/()@.',
+        'Password can only contain letters, numbers, and some special symbols.',
     });
   }
 

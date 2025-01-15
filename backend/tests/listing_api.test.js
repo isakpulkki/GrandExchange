@@ -37,8 +37,7 @@ const initialListings = [
   },
 ];
 
-beforeEach(async () => {
-  await Listing.deleteMany({});
+beforeAll(async () => {
   const category = new Category({ name: 'Home and Furniture' });
   await category.save();
   await Listing.insertMany(initialListings);
@@ -65,7 +64,6 @@ describe('When a listing is added by a new user...', () => {
   let token;
 
   beforeAll(async () => {
-    await User.deleteMany({});
     const user = {
       username: 'Username',
       password: 'Password',
@@ -138,9 +136,8 @@ test('Bad request when adding listing without token.', async () => {
 });
 
 afterAll(async () => {
-  await Listing.deleteMany({});
-  await Category.deleteMany({});
   await User.deleteMany({});
+  await Listing.deleteMany({});
   fs.access(imagePath, fs.constants.F_OK, () => {
     fs.unlink(imagePath, (err) => {
       if (err) {
