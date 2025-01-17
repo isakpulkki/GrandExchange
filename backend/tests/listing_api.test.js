@@ -26,6 +26,7 @@ const initialListings = [
     price: 95,
     user: 'User',
     image: 'image.png',
+    visible: true,
   },
   {
     title: 'Item 2',
@@ -34,30 +35,38 @@ const initialListings = [
     price: 45,
     user: 'User',
     image: 'image.png',
+    visible: false,
   },
 ];
 
 beforeAll(async () => {
+  await Category.deleteMany({});
+  await Listing.deleteMany({});
+  await User.deleteMany({});
   const category = new Category({ name: 'Home and Furniture' });
   await category.save();
   await Listing.insertMany(initialListings);
 });
 
-test('Listings are returned as JSON.', async () => {
-  await api
+test('Listings are returned as JSON and exclude invisible listings.', async () => {
+  const response = await api
     .get('/api/listings')
     .expect(200)
     .expect('Content-Type', /application\/json/);
+  // Only visible listings should be returned
+  expect(response.body).toHaveLength(1);
 });
 
-test('Two listings are returned.', async () => {
+test('Listings do not include the visible field.', async () => {
   const response = await api.get('/api/listings');
-  expect(response.body).toHaveLength(initialListings.length);
+  const listing = response.body[0];
+  expect(listing.visible).toBeUndefined();
 });
 
-test('Listings have id -field.', async () => {
+test('Listings have an ID -field.', async () => {
   const response = await api.get('/api/listings');
-  expect(response.body[0].id).toBeDefined();
+  const listing = response.body[0];
+  expect(listing.id).toBeDefined();
 });
 
 describe('When a listing is added by a new user...', () => {
@@ -72,7 +81,7 @@ describe('When a listing is added by a new user...', () => {
     token = 'Bearer ' + loginResponse.body.token;
   });
 
-  test('...Length of listings has risen by one.', async () => {
+  test('...Length of listings increases by one.', async () => {
     const imagePath = path.join(__dirname, 'image.png');
 
     const response = await api
@@ -83,9 +92,11 @@ describe('When a listing is added by a new user...', () => {
       .field('category', 'Home and Furniture')
       .field('price', 65)
       .attach('image', fs.createReadStream(imagePath));
+
     expect(response.status).toBe(201);
     const listings = await api.get('/api/listings');
-    expect(listings.body).toHaveLength(initialListings.length + 1);
+    expect(listings.body).toHaveLength(2);
+
     await api
       .delete(`/api/listings/${response.body.id}`)
       .set({ Authorization: token })
@@ -121,7 +132,7 @@ describe('When a listing is added by a new user...', () => {
       .expect(204);
 
     const responseAfterDelete = await api.get('/api/listings');
-    expect(responseAfterDelete.body).toHaveLength(initialListings.length);
+    expect(responseAfterDelete.body).toHaveLength(1);
   });
 });
 

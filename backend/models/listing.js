@@ -10,6 +10,7 @@ const listingSchema = new mongoose.Schema({
   category: String,
   user: String,
   image: String,
+  visible: Boolean
 });
 
 listingSchema.set('toJSON', {

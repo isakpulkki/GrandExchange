@@ -7,7 +7,7 @@ const uploadMiddleware = require('../utils/upload');
 
 listingsRouter.get('/', async (request, response) => {
   try {
-    const listings = await Listing.find({});
+    const listings = await Listing.find({ visible: true }, { visible: 0 });
     response.json(listings);
   } catch (error) {
     response.status(500).send('Error retrieving listings.');
@@ -16,7 +16,10 @@ listingsRouter.get('/', async (request, response) => {
 
 listingsRouter.get('/:id', async (request, response) => {
   try {
-    const listing = await Listing.findById(request.params.id);
+    const listing = await Listing.findOne(
+      { _id: request.params.id, visible: true },
+      { visible: 0 }
+    );
 
     if (!listing) {
       return response.status(404).send('Listing not found.');
@@ -67,6 +70,7 @@ listingsRouter.post(
         category,
         user: user.username,
         image: request.file.filename,
+        visible: true, // Set visible to true by default
       });
       const savedListing = await listing.save();
       user.listings = user.listings.concat(savedListing.id);
