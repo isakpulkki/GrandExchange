@@ -7,12 +7,19 @@ const middleware = require('../utils/middleware');
 
 usersRouter.get('/', middleware.userExtractor, async (request, response) => {
   try {
-    const username = request.user.username;
-    const listings = request.user.listings;
+    const { username, listings, admin } = request.user;
+
     if (!username || !listings) {
       return response.status(400).json({ error: 'User data is incomplete.' });
     }
-    response.status(200).json({ username, listings });
+
+    const userResponse = {
+      username,
+      listings: listings.filter((listing) => listing.visible === true),
+      admin: admin === true,
+    };
+
+    response.status(200).json(userResponse);
   } catch (error) {
     response.status(500).json({ error: 'Internal server error.' });
   }
