@@ -37,9 +37,6 @@ const NewListing = () => {
       if (/[^0-9]/.test(value)) {
         return;
       }
-      setFormData({ ...formData, [name]: value });
-      setMessage('');
-      return;
     }
 
     if (value.length <= LIMITS[name as keyof typeof LIMITS]) {
@@ -146,11 +143,7 @@ const NewListing = () => {
           <TextField
             key={field}
             fullWidth
-            label={
-              field === 'price'
-                ? 'Price in euros'
-                : field.charAt(0).toUpperCase() + field.slice(1)
-            }
+            label={field.charAt(0).toUpperCase() + field.slice(1)}
             name={field}
             value={formData[field as keyof typeof formData]}
             onChange={handleChange}
