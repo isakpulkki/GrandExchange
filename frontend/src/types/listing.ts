@@ -6,4 +6,5 @@ export interface Listing {
   user: string;
   category: string;
   image: string; 
+  visible: boolean;
 }

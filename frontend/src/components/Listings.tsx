@@ -8,9 +8,16 @@ import Sort from './Sort';
 interface ListingsProps {
   listings: listingType[];
   handleDelete?: (id: number) => void;
+  handleApprove?: (id: number) => void;
+  admin?: boolean;
 }
 
-const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
+const Listings: React.FC<ListingsProps> = ({
+  listings,
+  handleDelete,
+  handleApprove,
+  admin,
+}) => {
   const [categories, setCategories] = useState<{ id: number; name: string }[]>(
     []
   );
@@ -31,8 +38,6 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
 
   useEffect(() => {
     let updatedListings = listings;
-
-    // Filter by category
     if (selectedCategory !== 'All') {
       updatedListings = listings.filter(
         (listing) => listing.category === selectedCategory
@@ -72,21 +77,22 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
         : newVisibleListings;
     });
   };
+  const shouldShowFilterAndSort =
+    (handleDelete && admin) || (!handleDelete && !admin);
 
   return (
     <div>
-      {/* Show the filter component if this is not the 'My Account' page. */}
-
-      {!handleDelete && (
-        <Filter
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
+      {shouldShowFilterAndSort && (
+        <>
+          <Filter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
+          <Sort value={sortOption} onChange={setSortOption} />
+        </>
       )}
 
-      {/* Sorting Component */}
-      {!handleDelete && <Sort value={sortOption} onChange={setSortOption} />}
       <Grid2
         container
         spacing={2}
@@ -110,6 +116,7 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
                   price={price}
                   id={id}
                   handleDelete={handleDelete}
+                  handleApprove={handleApprove}
                   user={user}
                   image={image}
                 />
@@ -120,7 +127,6 @@ const Listings: React.FC<ListingsProps> = ({ listings, handleDelete }) => {
         )}
       </Grid2>
 
-      {/* Show "Show more" button if there are more listings to show. */}
       {filteredListings.length > visibleListings && (
         <Button
           variant="outlined"

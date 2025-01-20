@@ -14,7 +14,13 @@ const Listing = () => {
 
   useEffect(() => {
     const fetchListing = async () => {
-      const response = await fetch(`/api/listings/${id}`);
+      const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(`/api/listings/${id}`, { headers });
+
       if (response.ok) {
         const data: ListingType = await response.json();
         setListing(data);
@@ -22,7 +28,7 @@ const Listing = () => {
       setLoading(false);
     };
     fetchListing();
-  }, [id]);
+  }, [id, token]);
 
   if (loading)
     return (
@@ -42,6 +48,14 @@ const Listing = () => {
       <Typography variant="h4" gutterBottom sx={{ wordWrap: 'break-word' }}>
         {listing.title}
       </Typography>
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        sx={{ textAlign: 'center', marginBottom: 2 }}
+      >
+        <span style={{ fontStyle: 'italic' }}>{listing.category}</span>
+      </Typography>
+
       <ImageBox image={listing.image} />
       <Typography gutterBottom sx={{ wordWrap: 'break-word' }}>
         {listing.description}

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Paper, Typography, IconButton } from '@mui/material';
+import { Paper, Typography, IconButton, Box } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import DoneIcon from '@mui/icons-material/Done';
 import { useNavigate } from 'react-router-dom';
 import CustomBox from './CustomBox';
 import ImageBox from './ImageBox';
@@ -12,7 +13,9 @@ interface ListingProps {
   image: string;
   id: number;
   handleDelete?: (id: number) => void;
+  handleApprove?: (id: number) => void;
   user?: string;
+  visible?: boolean;
 }
 
 const Listing: React.FC<ListingProps> = ({
@@ -21,8 +24,10 @@ const Listing: React.FC<ListingProps> = ({
   price,
   id,
   handleDelete,
+  handleApprove,
   user,
   image,
+  visible,
 }) => {
   const navigate = useNavigate();
 
@@ -34,6 +39,13 @@ const Listing: React.FC<ListingProps> = ({
     event.stopPropagation();
     if (handleDelete) {
       handleDelete(id);
+    }
+  };
+
+  const handleApproveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (handleApprove) {
+      handleApprove(id);
     }
   };
 
@@ -80,17 +92,31 @@ const Listing: React.FC<ListingProps> = ({
         <Typography gutterBottom variant="h6" sx={{ fontWeight: 'bold' }}>
           {price} €
         </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 2,
+            marginTop: 2,
+          }}
+        >
+          {handleApprove && !visible && (
+            <IconButton onClick={handleApproveClick} color="success">
+              <DoneIcon />
+            </IconButton>
+          )}
 
-        {handleDelete ? (
-          <IconButton onClick={handleDeleteClick} sx={{ marginTop: 2 }}>
-            <Delete color="error" />
-          </IconButton>
-        ) : (
-          user && (
-            <Typography variant="body2" color="textSecondary">
-              Added by <span style={{ fontStyle: 'italic' }}>{user}</span>
-            </Typography>
-          )
+          {handleDelete && (
+            <IconButton onClick={handleDeleteClick} color="error">
+              <Delete />
+            </IconButton>
+          )}
+        </Box>
+
+        {user && !handleDelete && (
+          <Typography variant="body2" color="textSecondary">
+            Added by <span style={{ fontStyle: 'italic' }}>{user}</span>
+          </Typography>
         )}
       </CustomBox>
     </Paper>
