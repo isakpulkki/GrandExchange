@@ -6,6 +6,11 @@ const userSchema = mongoose.Schema({
     unique: true,
   },
   passwordHash: String,
+
+  admin: {
+    type: Boolean,
+    default: false,
+  },
   listings: [
     {
       type: mongoose.Schema.Types.ObjectId,
