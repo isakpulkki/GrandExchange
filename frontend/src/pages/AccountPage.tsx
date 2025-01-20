@@ -4,14 +4,16 @@ import CustomBox from '../components/CustomBox';
 import { useNavigate } from 'react-router-dom';
 import Listings from '../components/Listings';
 import { Listing } from '../types/listing';
+import { handleDelete } from '../utils/handleDelete';
 
 interface UserData {
   username: string;
-  listings: Listing[];
+  admin?: boolean;
 }
 
 export default function Account() {
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [listings, setListings] = useState<Listing[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [passwords, setPasswords] = useState({
     newPassword: '',
@@ -31,20 +33,10 @@ export default function Account() {
       },
     });
     if (!response.ok) throw new Error(await response.text());
-    setUserData(await response.json());
-  };
 
-  const handleDelete = async (id: number) => {
-    const response = await fetch(`/api/listings/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) throw new Error(await response.text());
-    setUserData((prev) => ({
-      ...prev!,
-      listings: prev!.listings.filter((listing) => listing.id !== id),
-    }));
-    setMessage('Listing deleted successfully.');
+    const data = await response.json();
+    setUserData({ username: data.username, admin: data.admin });
+    setListings(data.listings);
   };
 
   const handleChangePassword = async () => {
@@ -72,7 +64,7 @@ export default function Account() {
 
   return (
     <CustomBox>
-      <Box sx={{ alignItems: 'center'}}>
+      <Box sx={{ alignItems: 'center' }}>
         {userData && (
           <Typography variant="h4">Hi, {userData.username}!</Typography>
         )}
@@ -94,6 +86,16 @@ export default function Account() {
         >
           {showChangePassword ? 'Cancel' : 'Change Password'}
         </Button>
+
+        {userData?.admin && (
+          <Button
+            variant="contained"
+            onClick={() => navigate('/approvelistings')}
+            sx={{ marginTop: 2, marginLeft: 2 }}
+          >
+            Approve Listings
+          </Button>
+        )}
       </Box>
 
       {showChangePassword && (
@@ -146,8 +148,8 @@ export default function Account() {
         My Listings
       </Typography>
       <Listings
-        listings={userData?.listings || []}
-        handleDelete={handleDelete}
+        listings={listings}
+        handleDelete={(id: number) => handleDelete(id, token, setListings)}
       />
     </CustomBox>
   );
