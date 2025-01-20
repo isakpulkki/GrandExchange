@@ -5,31 +5,42 @@ const config = require('../utils/config');
 const middleware = require('../utils/middleware');
 const uploadMiddleware = require('../utils/upload');
 
-listingsRouter.get('/', async (request, response) => {
-  try {
-    const listings = await Listing.find({ visible: true }, { visible: 0 });
-    response.json(listings);
-  } catch (error) {
-    response.status(500).send('Error retrieving listings.');
-  }
-});
-
-listingsRouter.get('/:id', async (request, response) => {
-  try {
-    const listing = await Listing.findOne(
-      { _id: request.params.id, visible: true },
-      { visible: 0 }
-    );
-
-    if (!listing) {
-      return response.status(404).send('Listing not found.');
+listingsRouter.get(
+  '/',
+  middleware.adminExtractor,
+  async (request, response) => {
+    try {
+      const filter = request.isAdmin ? {} : { visible: true };
+      const listings = await Listing.find(filter);
+      response.json(listings );
+    } catch (error) {
+      response.status(500).send('Error retrieving listings.');
     }
-
-    response.json(listing);
-  } catch (error) {
-    response.status(500).send('Error retrieving the listing.');
   }
-});
+);
+
+listingsRouter.get(
+  '/:id',
+  middleware.adminExtractor,
+  async (request, response) => {
+    try {
+      const filter = request.isAdmin ? {} : { visible: true };
+
+      const listing = await Listing.findOne({
+        _id: request.params.id,
+        ...filter,
+      });
+
+      if (!listing) {
+        return response.status(404).send('Listing not found.');
+      }
+
+      response.json(listing);
+    } catch (error) {
+      response.status(500).send('Error retrieving the listing.');
+    }
+  }
+);
 
 listingsRouter.post(
   '/',
@@ -70,7 +81,7 @@ listingsRouter.post(
         category,
         user: user.username,
         image: request.file.filename,
-        visible: true, // Set visible to true by default
+        visible: false,
       });
       const savedListing = await listing.save();
       user.listings = user.listings.concat(savedListing.id);
@@ -84,20 +95,52 @@ listingsRouter.post(
 
 listingsRouter.delete(
   '/:id',
+  middleware.adminExtractor,
   middleware.userExtractor,
   async (request, response) => {
     try {
       const listing = await Listing.findById(request.params.id);
-      uploadMiddleware.deleteImage(listing.image);
-      if (listing.user.toString() !== request.user.username.toString()) {
-        return response
-          .status(400)
-          .json({ error: 'Invalid user for this listing.' });
+      if (!listing) {
+        return response.status(404).json({ error: 'Listing not found.' });
       }
+      if (
+        !request.isAdmin &&
+        listing.user.toString() !== request.user.username.toString()
+      ) {
+        return response.status(400).json({
+          error: 'You do not have permission to delete this listing.',
+        });
+      };
+      uploadMiddleware.deleteImage(listing.image);
       await Listing.findByIdAndDelete(listing.id);
       response.status(204).end();
     } catch (error) {
       response.status(500).send('Error deleting the listing.');
+    }
+  }
+);
+
+listingsRouter.patch(
+  '/:id',
+  middleware.adminExtractor,
+  async (request, response) => {
+    try {
+      if (!request.isAdmin) {
+        return response
+          .status(403)
+          .send('You do not have permission to update this listing.');
+      }
+
+      const listing = await Listing.findById(request.params.id);
+      if (!listing) {
+        return response.status(404).send('Listing not found.');
+      }
+      listing.visible = true;
+      await listing.save();
+
+      response.status(200).json(listing);
+    } catch (error) {
+      response.status(500).send('Error updating the listing.');
     }
   }
 );
