@@ -90,7 +90,7 @@ const NewListing = () => {
       });
 
       if (response.ok) {
-        setMessage('Listing submitted successfully!');
+        setMessage('Listing submitted successfully! Admin will review your listing shortly.');
         setFormData({ title: '', description: '', price: '', category: '' });
         setImage(null);
         (document.getElementById('image-input') as HTMLInputElement).value = '';
