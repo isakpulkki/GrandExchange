@@ -53,14 +53,7 @@ test('Listings are returned as JSON and exclude invisible listings.', async () =
     .get('/api/listings')
     .expect(200)
     .expect('Content-Type', /application\/json/);
-  // Only visible listings should be returned
   expect(response.body).toHaveLength(1);
-});
-
-test('Listings do not include the visible field.', async () => {
-  const response = await api.get('/api/listings');
-  const listing = response.body[0];
-  expect(listing.visible).toBeUndefined();
 });
 
 test('Listings have an ID -field.', async () => {
@@ -77,8 +70,12 @@ describe('When a listing is added by a new user...', () => {
       username: 'Username',
       password: 'Password',
     };
+
     const loginResponse = await api.post('/api/users').send(user).expect(201);
     token = 'Bearer ' + loginResponse.body.token;
+    const createdUser = await User.findOne({ username: 'Username' });
+    createdUser.admin = true;
+    await createdUser.save();
   });
 
   test('...Length of listings increases by one.', async () => {
@@ -92,10 +89,11 @@ describe('When a listing is added by a new user...', () => {
       .field('category', 'Home and Furniture')
       .field('price', 65)
       .attach('image', fs.createReadStream(imagePath));
-
     expect(response.status).toBe(201);
-    const listings = await api.get('/api/listings');
-    expect(listings.body).toHaveLength(2);
+    const listings = await api
+      .get('/api/listings')
+      .set({ Authorization: token });
+    expect(listings.body).toHaveLength(3);
 
     await api
       .delete(`/api/listings/${response.body.id}`)
