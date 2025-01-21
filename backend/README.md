@@ -25,6 +25,5 @@ $ npm run test
 Once the server is running, you can access the API locally at port `3000`.
 
 ### Categories
-### Categories
 
 Categories has to be added in to the MongoDB database manually for now. Categories have only one field, `name`.
