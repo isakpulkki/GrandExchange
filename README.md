@@ -9,7 +9,11 @@ It allows users to register, browse, search, and manage items for sale, featurin
 
 ## Instructions
 
-You can test the application live at [Fly.io](https://grandexchange.fly.dev). 
+You can test the application live at [Fly.io](https://grandexchange.fly.dev). Accessing admin rights in the application happens with the user in the table above.
+
+| Username  | Password |
+| - | - |
+| admin  | password  |
 
 To run the application on your local machine, start by configuring the environment variables for the backend using the code below.
 
@@ -32,5 +36,7 @@ $ docker run -d -p 127.0.0.1:3000:3000 grandexchange
 ```
 
 Once the Docker container is running, you can access the application locally at port `3000`.
+
+To access admin rights with your user account, you need to grant the admin role manually in your MongoDB database. After creating a user, update the user document directly in the database by adding `'admin': True`. Listings waiting for approval now show up in the 'My Account' -page.
 
 Alternatively, you can run the [front-](/frontend) and [backend](/backend) separately by following the instructions in their directories.
