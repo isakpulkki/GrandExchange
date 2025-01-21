@@ -5,7 +5,7 @@
 
 This project is a full-stack marketplace application named GrandExchange, built with React, TypeScript, Node.js and MongoDB.
 
-It allows users to register, browse, search, and manage items for sale, featuring categorization, sorting, and item removal. An admin role ensures quality by reviewing and approving listings. The app is responsive and designed for a seamless user experience.
+The application enables users to register, explore, search, and manage items for sale, with features like categorized listings and sorting options. Users can update passwords, delete their own listings, and communicate with others via a built-in messaging system. An admin role ensures quality control by reviewing and approving listings, as well as having the authority to delete any listing. The app is fully responsive, delivering a seamless and user-friendly experience.
 
 ## Instructions
 
@@ -40,7 +40,8 @@ Once the Docker container is running, you can access the application locally at 
 Alternatively, you can run the [front-](/frontend) and [backend](/backend) separately by following the instructions in their directories.
 
 ### Categories
-Categories has to be added in to the MongoDB database manually for now. Categories only have one field, `name`.
+
+Categories has to be added in to the MongoDB database manually for now. Categories have only one field, `name`.
 
 ### Admin
 
