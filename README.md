@@ -39,7 +39,7 @@ Once the Docker container is running, you can access the application locally at 
 
 Alternatively, you can run the [front-](/frontend) and [backend](/backend) separately by following the instructions in their directories.
 
-### Admin Rights
+### Admin
 
 To access admin rights with your user account, you need to grant the admin role manually in your MongoDB database. After creating a user, update the user document directly in the database by adding `admin: true`. 
 
