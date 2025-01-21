@@ -37,6 +37,10 @@ $ docker run -d -p 127.0.0.1:3000:3000 grandexchange
 
 Once the Docker container is running, you can access the application locally at port `3000`.
 
-To access admin rights with your user account, you need to grant the admin role manually in your MongoDB database. After creating a user, update the user document directly in the database by adding `admin: true`. Listings waiting for approval now show up in the 'My Account' -page.
-
 Alternatively, you can run the [front-](/frontend) and [backend](/backend) separately by following the instructions in their directories.
+
+### Admin Rights
+
+To access admin rights with your user account, you need to grant the admin role manually in your MongoDB database. After creating a user, update the user document directly in the database by adding `admin: true`. 
+
+Listings waiting for approval now show up in the 'My Account' -page.
