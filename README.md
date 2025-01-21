@@ -39,6 +39,9 @@ Once the Docker container is running, you can access the application locally at 
 
 Alternatively, you can run the [front-](/frontend) and [backend](/backend) separately by following the instructions in their directories.
 
+### Categories
+Categories has to be added in to the MongoDB database manually for now. Categories only have one field, `name`.
+
 ### Admin
 
 To access admin rights with your user account, you need to grant the admin role manually in your MongoDB database. After creating a user, update the user document directly in the database by adding `admin: true`. 
