@@ -53,16 +53,9 @@ conversationsRouter.get(
         return res.status(404).json({ error: 'Conversation not found.' });
       }
 
-      const messagesWithYou = conversation.messages.map((msg) => {
-        if (msg.sender === user) {
-          msg.sender = 'You';
-        }
-        return msg;
-      });
-
       res.status(200).json({
         success: true,
-        messages: messagesWithYou,
+        messages: conversation.messages,
       });
     } catch (error) {
       res.status(500).send('Error fetching the conversation.');
@@ -113,8 +106,9 @@ conversationsRouter.post('/', middleware.userExtractor, async (req, res) => {
       conversation,
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error sending the message: ', error);
     res.status(500).send('Error sending the message.');
   }
 });
+
 module.exports = conversationsRouter;
