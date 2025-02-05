@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid2, Typography, Button } from '@mui/material';
+import { Grid, Typography, Button } from '@mui/material';
 import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
 import Filter from './Filter';
@@ -27,7 +27,7 @@ const Listings: React.FC<ListingsProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredListings, setFilteredListings] =
     useState<listingType[]>(listings);
-  const [visibleListings, setVisibleListings] = useState<number>(3);
+  const [visibleListings, setVisibleListings] = useState<number>(4);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -77,23 +77,24 @@ const Listings: React.FC<ListingsProps> = ({
     }
 
     setFilteredListings(updatedListings);
-    setVisibleListings(Math.min(3, updatedListings.length));
+    setVisibleListings(Math.min(4, updatedListings.length));
   }, [selectedCategory, listings, sortOption, searchTerm]);
 
   const handleShowMore = () => {
     setVisibleListings((prev) => {
-      const newVisibleListings = prev + 3;
+      const newVisibleListings = prev + 4;
       return newVisibleListings > filteredListings.length
         ? filteredListings.length
         : newVisibleListings;
     });
   };
 
-  const shouldShowTools = (handleDelete && admin) || (!handleDelete && !admin);
+  const shouldShowFilterAndSort =
+    (handleDelete && admin) || (!handleDelete && !admin);
 
   return (
     <div>
-      {shouldShowTools && (
+      {shouldShowFilterAndSort && (
         <>
           <Filter
             categories={categories}
@@ -105,21 +106,25 @@ const Listings: React.FC<ListingsProps> = ({
         </>
       )}
 
-      <Grid2
-        container
-        spacing={2}
-        justifyContent="center"
-        sx={{ marginTop: 2 }}
-      >
+      <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 0 }}>
         {filteredListings.length > 0 ? (
           filteredListings
             .slice(0, visibleListings)
             .map(({ id, title, description, price, image, user }, index) => (
-              <Grid2
+              <Grid
                 key={id}
-                size={{
-                  xs: 12,
-                  md: visibleListings % 2 === 1 && index === 0 ? 12 : 6,
+                item
+                xs={12}
+                sm={6}
+                md={6}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  ...(visibleListings % 2 === 1 &&
+                    index === visibleListings - 1 && {
+                      md: 6,
+                      width: '50%',
+                    }),
                 }}
               >
                 <Listing
@@ -132,19 +137,19 @@ const Listings: React.FC<ListingsProps> = ({
                   user={user}
                   image={image}
                 />
-              </Grid2>
+              </Grid>
             ))
         ) : (
           <Typography color="textSecondary">No added listings yet.</Typography>
         )}
-      </Grid2>
+      </Grid>
 
       {filteredListings.length > visibleListings && (
         <Button
           variant="outlined"
           color="primary"
           onClick={handleShowMore}
-          sx={{ margin: 5 }}
+          sx={{ margin: 2 }}
         >
           Show More...
         </Button>

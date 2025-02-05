@@ -1,5 +1,6 @@
 import React from 'react';
-import { TextField, Box } from '@mui/material';
+import { TextField } from '@mui/material';
+import CustomBox from './CustomBox';
 
 interface SearchProps {
   searchTerm: string;
@@ -8,7 +9,7 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ searchTerm, onSearchChange }) => {
   return (
-    <Box sx={{ marginTop: 2, marginBottom: 2 }}>
+    <CustomBox>
       <TextField
         fullWidth
         variant="outlined"
@@ -16,7 +17,7 @@ const Search: React.FC<SearchProps> = ({ searchTerm, onSearchChange }) => {
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
       />
-    </Box>
+    </CustomBox>
   );
 };
 
