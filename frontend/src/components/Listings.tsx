@@ -4,6 +4,7 @@ import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
 import Filter from './Filter';
 import Sort from './Sort';
+import Search from './Search';
 
 interface ListingsProps {
   listings: listingType[];
@@ -23,6 +24,7 @@ const Listings: React.FC<ListingsProps> = ({
   );
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [sortOption, setSortOption] = useState<string>('newest');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredListings, setFilteredListings] =
     useState<listingType[]>(listings);
   const [visibleListings, setVisibleListings] = useState<number>(3);
@@ -38,9 +40,18 @@ const Listings: React.FC<ListingsProps> = ({
 
   useEffect(() => {
     let updatedListings = listings;
+
     if (selectedCategory !== 'All') {
-      updatedListings = listings.filter(
+      updatedListings = updatedListings.filter(
         (listing) => listing.category === selectedCategory
+      );
+    }
+
+    if (searchTerm) {
+      updatedListings = updatedListings.filter(
+        (listing) =>
+          listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          listing.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -67,7 +78,7 @@ const Listings: React.FC<ListingsProps> = ({
 
     setFilteredListings(updatedListings);
     setVisibleListings(Math.min(3, updatedListings.length));
-  }, [selectedCategory, listings, sortOption]);
+  }, [selectedCategory, listings, sortOption, searchTerm]);
 
   const handleShowMore = () => {
     setVisibleListings((prev) => {
@@ -77,12 +88,12 @@ const Listings: React.FC<ListingsProps> = ({
         : newVisibleListings;
     });
   };
-  const shouldShowFilterAndSort =
-    (handleDelete && admin) || (!handleDelete && !admin);
+
+  const shouldShowTools = (handleDelete && admin) || (!handleDelete && !admin);
 
   return (
     <div>
-      {shouldShowFilterAndSort && (
+      {shouldShowTools && (
         <>
           <Filter
             categories={categories}
@@ -90,6 +101,7 @@ const Listings: React.FC<ListingsProps> = ({
             onCategoryChange={setSelectedCategory}
           />
           <Sort value={sortOption} onChange={setSortOption} />
+          <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </>
       )}
 
