@@ -15,7 +15,7 @@ const Filter: React.FC<FilterProps> = ({
   newListing = false,
 }) => {
   return (
-    <FormControl required={newListing} sx={{ width: '250px', marginRight: 1, marginTop: 1 }}>
+    <FormControl required={newListing} sx={{ minWidth: 130 }}>
       <InputLabel id="category-label">Select a Category</InputLabel>
       <Select
         labelId="category-label"

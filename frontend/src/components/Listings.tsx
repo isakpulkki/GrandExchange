@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
+import { Grid, Typography, Button, Box } from '@mui/material';
 import Listing from './Listing';
 import { Listing as listingType } from '../types/listing';
 import Filter from './Filter';
@@ -27,7 +27,7 @@ const Listings: React.FC<ListingsProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredListings, setFilteredListings] =
     useState<listingType[]>(listings);
-  const [visibleListings, setVisibleListings] = useState<number>(4);
+  const [visibleListings, setVisibleListings] = useState<number>(3);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -77,7 +77,7 @@ const Listings: React.FC<ListingsProps> = ({
     }
 
     setFilteredListings(updatedListings);
-    setVisibleListings(Math.min(4, updatedListings.length));
+    setVisibleListings(Math.min(3, updatedListings.length));
   }, [selectedCategory, listings, sortOption, searchTerm]);
 
   const handleShowMore = () => {
@@ -89,26 +89,41 @@ const Listings: React.FC<ListingsProps> = ({
     });
   };
 
-  const shouldShowFilterAndSort =
-    (handleDelete && admin) || (!handleDelete && !admin);
+  const shouldShowTools = (handleDelete && admin) || (!handleDelete && !admin);
 
   return (
     <div>
-      {shouldShowFilterAndSort && (
+      {shouldShowTools && (
         <>
-          <Filter
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-          <Sort value={sortOption} onChange={setSortOption} />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              gap: 2,
+              marginBottom: 2,
+            }}
+          >
+            <Filter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
+            <Sort value={sortOption} onChange={setSortOption} />
+          </Box>
+
           <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </>
       )}
 
-      <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 0 }}>
-        {filteredListings.length > 0 ? (
-          filteredListings
+      {filteredListings.length > 0 ? (
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          sx={{ marginTop: 0 }}
+        >
+          {filteredListings
             .slice(0, visibleListings)
             .map(({ id, title, description, price, image, user }, index) => (
               <Grid
@@ -138,18 +153,27 @@ const Listings: React.FC<ListingsProps> = ({
                   image={image}
                 />
               </Grid>
-            ))
-        ) : (
+            ))}
+        </Grid>
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+          }}
+        >
           <Typography color="textSecondary">No added listings yet.</Typography>
-        )}
-      </Grid>
+        </Box>
+      )}
 
       {filteredListings.length > visibleListings && (
         <Button
           variant="outlined"
           color="primary"
           onClick={handleShowMore}
-          sx={{ margin: 2 }}
+          sx={{ margin: 5 }}
         >
           Show More...
         </Button>

@@ -8,7 +8,7 @@ interface SortProps {
 
 const Sort: React.FC<SortProps> = ({ value, onChange }) => {
   return (
-    <FormControl sx={{ width: '160px', marginLeft: 1, marginTop: 1 }}>
+    <FormControl>
       <InputLabel id="sort-label">Sort By</InputLabel>
       <Select
         labelId="sort-label"
