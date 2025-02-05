@@ -144,6 +144,24 @@ test('Bad request when adding listing without token.', async () => {
   expect(response.status).toBe(401);
 });
 
+test('Get a single listing by ID.', async () => {
+  const listingsResponse = await api
+    .get('/api/listings')
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  const listingId = listingsResponse.body[0].id;
+
+  const response = await api
+    .get(`/api/listings/${listingId}`)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  expect(response.body.title).toBe('Item 1');
+  expect(response.body.description).toBe('This is the first items description.');
+  expect(response.body.visible).toBe(true);
+});
+
 afterAll(async () => {
   await User.deleteMany({});
   await Listing.deleteMany({});

@@ -41,6 +41,16 @@ test('User can send a message to a another user.', async () => {
   );
 });
 
+test('User can retrieve a conversation with a single user.', async () => {
+  const response = await api
+    .get('/api/messages/Username')
+    .set('Authorization', token1)
+    .expect(200);
+
+  expect(response.body.success).toBe(true);
+  expect(response.body.messages[0].message).toBe('Hello from User!');
+});
+
 test('User can retrieve their conversations.', async () => {
   const response = await api
     .get('/api/messages')
