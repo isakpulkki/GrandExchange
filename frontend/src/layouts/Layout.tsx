@@ -10,7 +10,7 @@ const Layout: React.FC = () => {
       <NavigationBar />
       <Box
         sx={{
-          marginBottom: '5vh',
+          marginBottom: 2,
         }}
       >
         <Outlet />

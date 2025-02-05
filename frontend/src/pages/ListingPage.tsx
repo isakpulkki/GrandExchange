@@ -56,7 +56,7 @@ const Listing = () => {
         <span style={{ fontStyle: 'italic' }}>{listing.category}</span>
       </Typography>
 
-      <ImageBox image={listing.image} />
+      <ImageBox image={listing.image} fullSize={true} />
       <Typography gutterBottom sx={{ wordWrap: 'break-word' }}>
         {listing.description}
       </Typography>
@@ -66,12 +66,12 @@ const Listing = () => {
       <Typography
         variant="body2"
         color="textSecondary"
-        sx={{ textAlign: 'center' }}
+        sx={{ textAlign: 'center', marginBottom: 2 }}
       >
         Added by <span style={{ fontStyle: 'italic' }}>{listing.user}</span>
       </Typography>
 
-      {listing.user && <SendMessage listingUser={listing.user} token={token} />}
+      {listing.user && <SendMessage receiver={listing.user} token={token} />}
     </CustomBox>
   );
 };

@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { Button, TextField, Typography, Link } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Button, TextField, Typography } from '@mui/material';
 import { LIMITS } from '../config/index';
 
 interface SendMessageProps {
-  listingUser: string;
+  receiver: string;
   token: string | null;
+  onMessageSent?: (message: string) => void;
+  showMessageFeedback?: boolean;
 }
 
-const SendMessage = ({ listingUser, token }: SendMessageProps) => {
+const SendMessage = ({
+  receiver,
+  token,
+  onMessageSent,
+  showMessageFeedback = true,
+}: SendMessageProps) => {
   const [input, setInput] = useState<string>('');
   const [message, setMessage] = useState<string>('');
-  const navigate = useNavigate();
 
   const handleMessageSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,7 +40,7 @@ const SendMessage = ({ listingUser, token }: SendMessageProps) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        receiver: listingUser,
+        receiver,
         message: input,
       }),
     });
@@ -43,6 +48,9 @@ const SendMessage = ({ listingUser, token }: SendMessageProps) => {
     if (response.ok) {
       setInput('');
       setMessage('Message sent successfully!');
+      if (onMessageSent) {
+        onMessageSent(input);
+      }
     } else {
       const errorMessage = await response.text();
       setMessage(errorMessage || 'Failed to send message.');
@@ -51,55 +59,25 @@ const SendMessage = ({ listingUser, token }: SendMessageProps) => {
 
   return (
     <>
-      {!token ? (
-        <Typography color="textSecondary" sx={{ marginTop: 2 }}>
-          To send a message, you must be logged in.{' '}
-          <Link
-            component="button"
-            onClick={() => navigate('/login')}
-            sx={{ cursor: 'pointer' }}
-          >
-            Log in here
-          </Link>{' '}
-          or{' '}
-          <Link
-            component="button"
-            onClick={() => navigate('/register')}
-            sx={{ cursor: 'pointer' }}
-          >
-            register here
-          </Link>
-        </Typography>
-      ) : (
-        <>
-          <TextField
-            label="Type your message"
-            fullWidth
-            multiline
-            rows={6}
-            value={input}
-            onChange={(e) => {
-              if (e.target.value.length <= LIMITS.message)
-                setInput(e.target.value);
-            }}
-            variant="outlined"
-            sx={{ marginTop: 2 }}
-            helperText={`${input.length}/${LIMITS.message}`}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleMessageSubmit}
-            sx={{ marginTop: 2 }}
-          >
-            Send Message
-          </Button>
-        </>
-      )}
+      <TextField
+        label="Type your message"
+        fullWidth
+        multiline
+        rows={showMessageFeedback ? 3 : 2}
+        value={input}
+        onChange={(e) => {
+          if (e.target.value.length <= LIMITS.message) setInput(e.target.value);
+        }}
+        variant="outlined"
+        helperText={`${input.length}/${LIMITS.message}`}
+      />
+      <Button variant="contained" color="primary" onClick={handleMessageSubmit}>
+        Send Message
+      </Button>
 
-      {message && (
+      {showMessageFeedback && message && (
         <Typography
-          sx={{ marginTop: 2 }}
+          sx={{ marginTop: 1 }}
           color={message.toLowerCase().includes('success') ? 'green' : 'error'}
         >
           {message}
