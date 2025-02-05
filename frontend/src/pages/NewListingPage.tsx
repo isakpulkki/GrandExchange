@@ -90,7 +90,9 @@ const NewListing = () => {
       });
 
       if (response.ok) {
-        setMessage('Listing submitted successfully! Admin will review your listing shortly.');
+        setMessage(
+          'Listing submitted successfully! Admin will review your listing shortly.'
+        );
         setFormData({ title: '', description: '', price: '', category: '' });
         setImage(null);
         (document.getElementById('image-input') as HTMLInputElement).value = '';
@@ -126,7 +128,11 @@ const NewListing = () => {
       )}
 
       {!image && (
-        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginTop: 1, marginBottom: 2 }}
+        >
           Upload an image (JPG, JPEG, PNG) - Max 20Mb
         </Typography>
       )}

@@ -24,7 +24,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const regex = /^[A-Za-z0-9!"#€%&/()@]+$/;
-        if (regex.test(value) || value === '') {
+    if (regex.test(value) || value === '') {
       setFormData({
         ...formData,
         [name]: value,

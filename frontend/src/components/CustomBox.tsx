@@ -12,7 +12,7 @@ const CustomBox: React.FC<CustomBoxProps> = ({ children, sx, ...props }) => {
       sx={{
         maxWidth: 800,
         margin: '0 auto',
-        padding: 2,
+        padding: 1,
         display: 'flex',
         flexDirection: 'column',
         ...sx,
