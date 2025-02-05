@@ -171,7 +171,7 @@ const Listings: React.FC<ListingsProps> = ({
           variant="outlined"
           color="primary"
           onClick={handleShowMore}
-          sx={{ margin: 5 }}
+          sx={{ margin: 2 }}
         >
           Show More...
         </Button>
