@@ -83,7 +83,7 @@ export default function ConversationPage() {
   }
 
   return (
-    <CustomBox sx={{ gap: 2, width: '60%', margin: '0 auto' }}>
+    <CustomBox sx={{ gap: 2 }}>
       <Typography variant="h4">
         Conversation with <i>{participant}</i>
       </Typography>
@@ -91,10 +91,8 @@ export default function ConversationPage() {
         sx={{
           flex: 1,
           overflowY: 'auto',
-          maxHeight: '60vh',
-          padding: 2,
-          border: '1px solid #444',
-          borderRadius: '8px',
+          maxHeight: '45vh',
+          padding: 1,
         }}
       >
         {conversation ? (
@@ -104,7 +102,7 @@ export default function ConversationPage() {
                 key={msg._id}
                 sx={{
                   textAlign: 'center',
-                  padding: 2,
+                  padding: 1,
                   marginBottom: 2,
                   backgroundColor: (theme) =>
                     msg.sender === userName
