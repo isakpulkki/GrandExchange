@@ -27,7 +27,7 @@ const Listings: React.FC<ListingsProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredListings, setFilteredListings] =
     useState<listingType[]>(listings);
-  const [visibleListings, setVisibleListings] = useState<number>(3);
+  const [visibleListings, setVisibleListings] = useState<number>(4);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -77,7 +77,7 @@ const Listings: React.FC<ListingsProps> = ({
     }
 
     setFilteredListings(updatedListings);
-    setVisibleListings(Math.min(3, updatedListings.length));
+    setVisibleListings(Math.min(4, updatedListings.length));
   }, [selectedCategory, listings, sortOption, searchTerm]);
 
   const handleShowMore = () => {
@@ -131,13 +131,11 @@ const Listings: React.FC<ListingsProps> = ({
                 item
                 xs={12}
                 sm={6}
-                md={6}
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   ...(visibleListings % 2 === 1 &&
                     index === visibleListings - 1 && {
-                      md: 6,
                       width: '50%',
                     }),
                 }}
