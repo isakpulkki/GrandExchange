@@ -15,11 +15,6 @@ const SendMessage = ({
   const handleMessageSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!token) {
-      setMessage('You must be logged in to send a message!');
-      return;
-    }
-
     if (input.trim() === '') {
       setMessage('Message cannot be empty.');
       return;
