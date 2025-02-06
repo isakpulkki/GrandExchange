@@ -4,7 +4,9 @@ export interface Listing {
   description: string;
   price: number;
   user: string;
-  category: string;
   image: string; 
-  visible: boolean;
+  category?: string;
+  visible?: boolean;
+  handleDelete?: (id: number) => void;
+  handleApprove?: (id: number) => void;
 }
