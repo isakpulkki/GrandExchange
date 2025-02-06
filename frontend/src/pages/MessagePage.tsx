@@ -5,30 +5,18 @@ import { Conversation } from '../types/conversation';
 import CustomBox from '../components/CustomBox';
 import Timestamp from '../components/Timestamp';
 import SendMessage from '../components/SendMessage';
+import useUserData from '../hooks/useUserData';
 
 export default function ConversationPage() {
   const { participant } = useParams<{ participant: string }>();
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userName, setUserName] = useState('');
+  const userData = useUserData();
   const token = localStorage.getItem('token');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevMessagesRef = useRef<string[]>([]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await fetch('/api/users', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserName(data.username);
-      }
-    };
-
     const fetchConversation = async () => {
       const response = await fetch(`/api/messages/${participant}`, {
         headers: {
@@ -46,8 +34,6 @@ export default function ConversationPage() {
       }
       setLoading(false);
     };
-
-    fetchUserData();
     fetchConversation();
     const intervalId = setInterval(fetchConversation, 1000);
     return () => clearInterval(intervalId);
@@ -105,11 +91,11 @@ export default function ConversationPage() {
                   padding: 1,
                   marginBottom: 2,
                   backgroundColor: (theme) =>
-                    msg.sender === userName
+                    userData && msg.sender === userData.username
                       ? theme.palette.primary.light
                       : theme.palette.background.paper,
                   color: (theme) =>
-                    msg.sender === userName
+                    userData && msg.sender === userData.username
                       ? theme.palette.primary.contrastText
                       : theme.palette.text.primary,
                 }}
@@ -122,7 +108,9 @@ export default function ConversationPage() {
                   }}
                   gutterBottom
                 >
-                  {msg.sender === userName ? 'You' : msg.sender}
+                  {userData && msg.sender === userData.username
+                    ? 'You'
+                    : msg.sender}
                 </Typography>
                 <Typography
                   variant="body2"

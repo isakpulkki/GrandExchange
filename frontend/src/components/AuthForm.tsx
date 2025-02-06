@@ -3,10 +3,7 @@ import axios from 'axios';
 import { TextField, Button, Typography, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomBox from './CustomBox';
-
-interface AuthFormProps {
-  type: 'login' | 'register';
-}
+import type { AuthFormProps } from '../types/authForm';
 
 const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
   const [formData, setFormData] = useState<{

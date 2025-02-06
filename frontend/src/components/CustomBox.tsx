@@ -1,10 +1,6 @@
 import React from 'react';
-import { Box, SxProps, Theme } from '@mui/material';
-
-interface CustomBoxProps {
-  children: React.ReactNode;
-  sx?: SxProps<Theme>;
-}
+import { Box } from '@mui/material';
+import type { CustomBoxProps } from '../types/customBox';
 
 const CustomBox: React.FC<CustomBoxProps> = ({ children, sx, ...props }) => {
   return (

@@ -1,10 +1,6 @@
 import React from 'react';
 import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
-
-interface SortProps {
-  value: string;
-  onChange: (value: string) => void;
-}
+import { SortProps } from '../types/sort';
 
 const Sort: React.FC<SortProps> = ({ value, onChange }) => {
   return (

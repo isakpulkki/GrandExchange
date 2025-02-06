@@ -5,14 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import Listings from '../components/Listings';
 import { Listing } from '../types/listing';
 import { handleDelete } from '../utils/handleDelete';
-
-interface UserData {
-  username: string;
-  admin?: boolean;
-}
+import useUserData from '../hooks/useUserData';
 
 export default function Account() {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const userData = useUserData();
   const [listings, setListings] = useState<Listing[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [passwords, setPasswords] = useState({
@@ -23,24 +19,9 @@ export default function Account() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
-
-  const fetchUserData = async () => {
-    if (!token) return navigate('/login');
-    const response = await fetch('/api/users', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) throw new Error(await response.text());
-
-    const data = await response.json();
-    setUserData({ username: data.username, admin: data.admin });
-    setListings(data.listings);
-  };
-
   const handleChangePassword = async () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
+      setMessage('Passwords do not match');
       return;
     }
     const response = await fetch('/api/users', {
@@ -51,22 +32,17 @@ export default function Account() {
       },
       body: JSON.stringify({ password: passwords.newPassword }),
     });
-    if (!response.ok) {
-      if (response.status === 429) {
-        setMessage('Too many requests, please wait.');
-      } else {
-        throw new Error(await response.text());
-      }
-      return;
-    }
+    if (!response.ok) throw new Error(await response.text());
     setPasswords({ newPassword: '', confirmPassword: '' });
     setShowChangePassword(false);
     setMessage('Password changed successfully.');
   };
 
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    if (userData) {
+      setListings(userData.listings);
+    }
+  }, [userData]);
 
   return (
     <CustomBox>

@@ -1,12 +1,6 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-
-interface FilterProps {
-  categories: { id: number; name: string }[];
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
-  newListing?: boolean;
-}
+import type { FilterProps } from '../types/filter';
 
 const Filter: React.FC<FilterProps> = ({
   categories,

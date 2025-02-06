@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Typography, Button, Box } from '@mui/material';
 import Listing from './Listing';
-import { Listing as listingType } from '../types/listing';
+import { Listing as ListingType } from '../types/listing';
+import { ListingsProps } from '../types/listings';
+
 import Filter from './Filter';
 import Sort from './Sort';
 import Search from './Search';
-
-interface ListingsProps {
-  listings: listingType[];
-  handleDelete?: (id: number) => void;
-  handleApprove?: (id: number) => void;
-  admin?: boolean;
-}
-
 const Listings: React.FC<ListingsProps> = ({
   listings,
   handleDelete,
@@ -26,7 +20,7 @@ const Listings: React.FC<ListingsProps> = ({
   const [sortOption, setSortOption] = useState<string>('newest');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredListings, setFilteredListings] =
-    useState<listingType[]>(listings);
+    useState<ListingType[]>(listings);
   const [visibleListings, setVisibleListings] = useState<number>(4);
 
   useEffect(() => {

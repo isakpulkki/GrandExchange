@@ -5,29 +5,18 @@ import DoneIcon from '@mui/icons-material/Done';
 import { useNavigate } from 'react-router-dom';
 import CustomBox from './CustomBox';
 import ImageBox from './ImageBox';
+import { Listing as ListingType } from '../types/listing';
 
-interface ListingProps {
-  title: string;
-  description: string;
-  price: number;
-  image: string;
-  id: number;
-  handleDelete?: (id: number) => void;
-  handleApprove?: (id: number) => void;
-  user?: string;
-  visible?: boolean;
-}
-
-const Listing: React.FC<ListingProps> = ({
+const Listing: React.FC<ListingType> = ({
   title,
   description,
   price,
   id,
-  handleDelete,
-  handleApprove,
   user,
   image,
   visible,
+  handleDelete,
+  handleApprove,
 }) => {
   const navigate = useNavigate();
 

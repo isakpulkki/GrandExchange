@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Button, TextField, Typography } from '@mui/material';
 import { LIMITS } from '../config/index';
-
-interface SendMessageProps {
-  receiver: string;
-  token: string | null;
-  onMessageSent?: (message: string) => void;
-  showMessageFeedback?: boolean;
-}
+import { SendMessageProps } from '../types/sendMessage';
 
 const SendMessage = ({
   receiver,

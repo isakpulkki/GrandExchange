@@ -1,10 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-
-interface ImageBoxProps {
-  image: string;
-  fullSize?: boolean;
-}
+import type { ImageBoxProps } from '../types/imageBox';
 
 const ImageBox: React.FC<ImageBoxProps> = ({ image, fullSize = false }) => {
   return (
