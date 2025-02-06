@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Typography, Link } from '@mui/material';
 import CustomBox from '../components/CustomBox';
 import ImageBox from '../components/ImageBox';
 import { Listing as ListingType } from '../types/listing';
@@ -70,8 +70,22 @@ const Listing = () => {
       >
         Added by <span style={{ fontStyle: 'italic' }}>{listing.user}</span>
       </Typography>
-
-      {listing.user && <SendMessage receiver={listing.user} token={token} />}
+      {token ? (
+        <SendMessage receiver={listing.user} token={token} />
+      ) : (
+        <Typography variant="body1">
+          <span style={{ fontStyle: 'italic' }}>
+            <Link href="/login" color="primary">
+              Login here
+            </Link>{' '}
+            or{' '}
+            <Link href="/register" color="primary">
+              register here
+            </Link>{' '}
+            to send a message to the seller!
+          </span>
+        </Typography>
+      )}
     </CustomBox>
   );
 };
