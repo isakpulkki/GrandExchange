@@ -97,8 +97,12 @@ const NewListing = () => {
         setImage(null);
         (document.getElementById('image-input') as HTMLInputElement).value = '';
       } else {
-        const error = await response.json();
-        setMessage(error.message || 'Failed to add listing.');
+        if (response.status === 429) {
+          setMessage('Too many requests, please wait.');
+        } else {
+          const error = await response.json();
+          setMessage(error.message || 'Failed to add listing.');
+        }
       }
     } catch {
       setMessage('An unexpected error occurred.');

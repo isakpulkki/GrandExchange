@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const usersRouter = require('express').Router();
 const User = require('../models/user');
 const middleware = require('../utils/middleware');
+const { limiter } = require('../utils/limiter');
 
 usersRouter.get('/', middleware.userExtractor, async (request, response) => {
   try {
@@ -27,7 +28,7 @@ usersRouter.get('/', middleware.userExtractor, async (request, response) => {
 
 const validRegex = /^[A-Za-z0-9!"#€%&/()@]+$/;
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', limiter, async (request, response) => {
   const { username, password } = request.body;
   const { USERNAME_LIMITS, PASSWORD_LIMITS } = config;
 
@@ -85,7 +86,7 @@ usersRouter.post('/', async (request, response) => {
   }
 });
 
-usersRouter.put('/', middleware.userExtractor, async (request, response) => {
+usersRouter.put('/', middleware.userExtractor, limiter, async (request, response) => {
   const { password } = request.body;
   const { PASSWORD_LIMITS } = config;
 

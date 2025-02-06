@@ -51,10 +51,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       navigate('/');
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        const errorMessage =
-          err.response?.data?.error ||
-          'An unexpected error occurred. Please try again.';
-        setError(errorMessage);
+        if (err.response?.status === 429) {
+          setError('Too many requests, please wait.');
+        } else {
+          const errorMessage =
+            err.response?.data?.error ||
+            'An unexpected error occurred. Please try again.';
+          setError(errorMessage);
+        }
       } else if (err instanceof Error) {
         setError(
           err.message || 'An unexpected error occurred. Please try again.'

@@ -3,8 +3,9 @@ const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router();
 const User = require('../models/user');
 const config = require('../utils/config');
+const { limiter } = require('../utils/limiter');
 
-loginRouter.post('/', async (request, response) => {
+loginRouter.post('/', limiter, async (request, response) => {
   const { username, password } = request.body;
 
   try {

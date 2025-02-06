@@ -41,7 +41,6 @@ export default function Account() {
 
   const handleChangePassword = async () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
-      setMessage('Passwords do not match');
       return;
     }
     const response = await fetch('/api/users', {
@@ -52,7 +51,14 @@ export default function Account() {
       },
       body: JSON.stringify({ password: passwords.newPassword }),
     });
-    if (!response.ok) throw new Error(await response.text());
+    if (!response.ok) {
+      if (response.status === 429) {
+        setMessage('Too many requests, please wait.');
+      } else {
+        throw new Error(await response.text());
+      }
+      return;
+    }
     setPasswords({ newPassword: '', confirmPassword: '' });
     setShowChangePassword(false);
     setMessage('Password changed successfully.');

@@ -4,6 +4,7 @@ const Category = require('../models/category');
 const config = require('../utils/config');
 const middleware = require('../utils/middleware');
 const uploadMiddleware = require('../utils/upload');
+const { limiter } = require('../utils/limiter');
 
 listingsRouter.get(
   '/',
@@ -12,7 +13,7 @@ listingsRouter.get(
     try {
       const filter = request.isAdmin ? {} : { visible: true };
       const listings = await Listing.find(filter);
-      response.json(listings );
+      response.json(listings);
     } catch (error) {
       response.status(500).send('Error retrieving listings.');
     }
@@ -44,6 +45,7 @@ listingsRouter.get(
 
 listingsRouter.post(
   '/',
+  limiter,
   middleware.userExtractor,
   uploadMiddleware.uploadImage.single('image'),
   async (request, response) => {
@@ -110,7 +112,7 @@ listingsRouter.delete(
         return response.status(400).json({
           error: 'You do not have permission to delete this listing.',
         });
-      };
+      }
       uploadMiddleware.deleteImage(listing.image);
       await Listing.findByIdAndDelete(listing.id);
       response.status(204).end();
