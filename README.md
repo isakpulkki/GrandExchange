@@ -9,7 +9,7 @@ The application enables users to register, explore, search, and manage items for
 
 ## Instructions
 
-You can test the application live at [Fly.io](https://grandexchange.fly.dev). Accessing admin rights in the application happens with the user in the table above.
+You can test the application live [here](https://grandexchange.pulkki.me). Accessing admin rights in the application happens with the user in the table above.
 
 | Username  | Password |
 | - | - |
