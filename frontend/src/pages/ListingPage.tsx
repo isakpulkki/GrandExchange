@@ -65,7 +65,6 @@ const Listing = () => {
       </Typography>
       <Typography
         variant="body2"
-        color="textSecondary"
         sx={{ textAlign: 'center', marginBottom: 2 }}
       >
         Added by <span style={{ fontStyle: 'italic' }}>{listing.user}</span>
@@ -73,8 +72,9 @@ const Listing = () => {
       {token ? (
         <SendMessage receiver={listing.user} token={token} />
       ) : (
-        <Typography variant="body1">
-          <span style={{ fontStyle: 'italic' }}>
+        <Typography 
+        variant="body2"
+        color="textSecondary">
             <Link href="/login" color="primary">
               Login here
             </Link>{' '}
@@ -83,7 +83,6 @@ const Listing = () => {
               register here
             </Link>{' '}
             to send a message to the seller!
-          </span>
         </Typography>
       )}
     </CustomBox>
