@@ -4,7 +4,7 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 
-  test('...It fails if the username is not unique.', async () => {
+  test('Fails if the username is not unique.', async () => {
     const newUser = {
       username: 'Userna',
       password: 'Password',
@@ -25,7 +25,7 @@ const api = supertest(app);
     expect(response.status).toBe(400);
   });
 
-  test('...It fails if the username is not at least three characters long.', async () => {
+  test('Fails if the username is not at least three characters long.', async () => {
     const newUser = {
       username: 'Us',
       password: 'Password',
@@ -35,7 +35,8 @@ const api = supertest(app);
     expect(response.status).toBe(400);
   });
 
-  test('...It fails if the password is not at least eight characters long.', async () => {
+  
+  test('Fails if the password is not at least eight characters long.', async () => {
     const newUser = {
       username: 'Usernam',
       password: 'Passwor',
@@ -45,7 +46,7 @@ const api = supertest(app);
     expect(response.status).toBe(400);
   });
 
-  test('...The user can log in and receive a valid token.', async () => {
+  test('The user can log in and retrieve their users info.', async () => {
     const newUser = {
       username: 'User',
       password: 'Password',
@@ -63,10 +64,17 @@ const api = supertest(app);
       .expect(200)
       .expect('Content-Type', /application\/json/);
 
-    expect(loginResponse.body.token).toBeDefined();
+      const userResponse = await api
+      .get('/api/users')
+      .set('Authorization', `Bearer ${loginResponse.body.token}`)
+      .expect(200);
+  
+      expect(userResponse.body.username).toBe('User');
   });
 
-  test('...It fails if the username contains invalid characters.', async () => {
+
+
+  test('Fails if the username contains invalid characters.', async () => {
     const newUser = {
       username: ' User ',
       password: 'Password',
@@ -79,7 +87,7 @@ const api = supertest(app);
     );
   });
 
-  test('...The password can be updated.', async () => {
+  test('The password can be updated.', async () => {
     const newUser = {
       username: 'Use',
       password: 'Password',
@@ -97,6 +105,7 @@ const api = supertest(app);
 
     expect(response.body.message).toBe('Password updated successfully.');
   });
+
 
 afterAll(async () => {
 
