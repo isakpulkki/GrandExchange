@@ -94,7 +94,7 @@ describe('When a listing is added by a new user...', () => {
       .get('/api/listings')
       .set({ Authorization: token });
     expect(listings.body).toHaveLength(3);
-
+    await api.get(`/api/uploads/${response.body.image}`).expect(200);
     await api
       .delete(`/api/listings/${response.body.id}`)
       .set({ Authorization: token })
@@ -132,6 +132,24 @@ describe('When a listing is added by a new user...', () => {
     const responseAfterDelete = await api.get('/api/listings');
     expect(responseAfterDelete.body).toHaveLength(1);
   });
+
+  test('...Listing can be approved by admin.', async () => {
+    const response = await api
+      .post('/api/listings')
+      .set({ Authorization: token })
+      .field('title', 'Item 3')
+      .field('description', "This is the third item's description.")
+      .field('category', 'Home and Furniture')
+      .field('price', 65)
+      .attach('image', fs.createReadStream(imagePath));
+
+    const responseAfterPatch = await api
+      .patch(`/api/listings/${response.body.id}`)
+      .set({ Authorization: token })
+      .expect(200);
+
+    expect(responseAfterPatch.body.visible);
+  });
 });
 
 test('Bad request when adding listing without token.', async () => {
@@ -158,8 +176,10 @@ test('Get a single listing by ID.', async () => {
     .expect('Content-Type', /application\/json/);
 
   expect(response.body.title).toBe('Item 1');
-  expect(response.body.description).toBe('This is the first items description.');
-  expect(response.body.visible).toBe(true);
+  expect(response.body.description).toBe(
+    'This is the first items description.'
+  );
+  expect(response.body.visible).toBe(true); 
 });
 
 afterAll(async () => {
