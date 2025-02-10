@@ -23,7 +23,6 @@ jobs:
       - name: Add SECRET to the .env
         run: echo "SECRET=${{ secrets.SECRET }}" >> ./backend/.env
 
-
       - name: Install backend dependencies
         working-directory: ./backend
         run: npm install
@@ -31,6 +30,10 @@ jobs:
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm install
+
+      - name: Install Playwright
+        working-directory: ./frontend
+        run: npx playwright install
 
       - name: Build the frontend
         working-directory: ./frontend
