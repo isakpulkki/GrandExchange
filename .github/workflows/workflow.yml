@@ -24,6 +24,10 @@ jobs:
         run: echo "SECRET=${{ secrets.SECRET }}" >> ./backend/.env
 
 
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm install
+
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm install
@@ -34,7 +38,7 @@ jobs:
 
       - name: Start the server
         working-directory: ./backend
-        run: npm ci && npm run build
+        run: npm start &
         env:
           NODE_ENV: test
 
