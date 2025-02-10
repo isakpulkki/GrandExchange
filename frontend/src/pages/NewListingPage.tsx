@@ -76,14 +76,6 @@ const NewListing = () => {
       formDataToSubmit.append('category', category);
       formDataToSubmit.append('image', image);
 
-      console.log('Form Data to Submit:');
-      console.log('Title:', title);
-      console.log('Description:', description);
-      console.log('Price:', price);
-      console.log('Category:', category);
-      console.log('Image:', image);
-
-
       const response = await fetch('/api/listings', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
