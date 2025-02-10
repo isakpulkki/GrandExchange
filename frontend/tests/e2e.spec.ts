@@ -14,7 +14,7 @@ test('Register, log out, log in, make a new listing, and verify it shows on the 
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ success: true, token: 'mock-token' }),
+      body: JSON.stringify({ success: true, token: 'token' }),
     });
   });
 
@@ -22,7 +22,7 @@ test('Register, log out, log in, make a new listing, and verify it shows on the 
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({ success: true, token: 'mock-token' }),
+      body: JSON.stringify({ success: true, token: 'token' }),
     });
   });
 
