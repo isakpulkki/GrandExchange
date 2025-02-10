@@ -76,6 +76,14 @@ const NewListing = () => {
       formDataToSubmit.append('category', category);
       formDataToSubmit.append('image', image);
 
+      console.log('Form Data to Submit:');
+      console.log('Title:', title);
+      console.log('Description:', description);
+      console.log('Price:', price);
+      console.log('Category:', category);
+      console.log('Image:', image);
+
+
       const response = await fetch('/api/listings', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
@@ -88,7 +96,7 @@ const NewListing = () => {
         );
         setFormData({ title: '', description: '', price: '', category: '' });
         setImage(null);
-        (document.getElementById('image-input') as HTMLInputElement).value = '';
+        (document.getElementById('image') as HTMLInputElement).value = '';
       } else {
         const error = await response.json();
         setMessage(
@@ -97,8 +105,8 @@ const NewListing = () => {
             : error.message || 'Failed to add listing.'
         );
       }
-    } catch {
-      setMessage('An unexpected error occurred.');
+    } catch (err){
+      setMessage('An unexpected error occurred.' + err);
     }
   };
 
