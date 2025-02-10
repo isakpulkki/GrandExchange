@@ -9,9 +9,10 @@ const Filter: React.FC<FilterProps> = ({
   newListing = false,
 }) => (
   <FormControl required={newListing} sx={{ minWidth: 130 }}>
-    <InputLabel id="category-label">Select a Category</InputLabel>
+    <InputLabel id="category">Select a Category</InputLabel>
     <Select
-      labelId="category-label"
+      labelId="category"
+      name="category"
       value={selectedCategory}
       onChange={(e) => onCategoryChange(e.target.value)}
       label="Select a Category"

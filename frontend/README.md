@@ -9,6 +9,9 @@ $ npm install
 
 # Run the server in developement mode
 $ npm run dev
+
+# Run the Playwright tests
+$ npm run test
 ```
 
 Once the server is running, the frontend should be up and accessible in your browser.

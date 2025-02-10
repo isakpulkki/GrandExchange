@@ -2,6 +2,7 @@
 .env
 **/coverage
 **/uploads
+**/test-results
 
 # Ignore dist folders in the root and frontend directories
 **/dist

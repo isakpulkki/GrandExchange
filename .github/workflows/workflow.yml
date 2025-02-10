@@ -11,18 +11,47 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
       - name: Create .env file in the backend
         run: echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" > ./backend/.env
+
       - name: Add SECRET to the .env
         run: echo "SECRET=${{ secrets.SECRET }}" >> ./backend/.env
-      - name: Install dependencies
+
+      - name: Install backend dependencies
         working-directory: ./backend
         run: npm install
-      - name: Run tests
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build the frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Start the server
+        working-directory: ./backend
+        run: npm start &
+        env:
+          NODE_ENV: test
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000
+
+      - name: Run backend tests
         working-directory: ./backend
         run: npm run test
+
+      - name: Run Playwright tests
+        working-directory: ./frontend
+        run: npm run test
+
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:

@@ -114,7 +114,7 @@ const NewListing = () => {
           onChange={handleImageChange}
           hidden
           required
-          id="image-input"
+          id="image"
         />
       </Button>
 
