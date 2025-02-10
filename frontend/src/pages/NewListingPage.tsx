@@ -29,16 +29,11 @@ const NewListing = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-
-    if (name === 'price') {
-      if (value.length === 1 && value === '0') {
-        return;
-      }
-      if (/[^0-9]/.test(value)) {
-        return;
-      }
-    }
-
+    if (
+      name === 'price' &&
+      ((value.length === 1 && value === '0') || /[^0-9]/.test(value))
+    )
+      return;
     if (value.length <= LIMITS[name as keyof typeof LIMITS]) {
       setFormData({ ...formData, [name]: value });
       setMessage('');
@@ -62,14 +57,12 @@ const NewListing = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!image) {
       setMessage('Image must be set for a new listing.');
       return;
     }
     const { title, description, price, category } = formData;
     const token = localStorage.getItem('token');
-
     if (!token) {
       setMessage('You have to be logged in to submit a new listing.');
       return;
@@ -97,12 +90,12 @@ const NewListing = () => {
         setImage(null);
         (document.getElementById('image-input') as HTMLInputElement).value = '';
       } else {
-        if (response.status === 429) {
-          setMessage('Too many requests, please wait.');
-        } else {
-          const error = await response.json();
-          setMessage(error.message || 'Failed to add listing.');
-        }
+        const error = await response.json();
+        setMessage(
+          response.status === 429
+            ? 'Too many requests, please wait.'
+            : error.message || 'Failed to add listing.'
+        );
       }
     } catch {
       setMessage('An unexpected error occurred.');
@@ -140,6 +133,7 @@ const NewListing = () => {
           Upload an image (JPG, JPEG, PNG) - Max 20Mb
         </Typography>
       )}
+
       <form onSubmit={handleSubmit}>
         <Filter
           newListing={true}

@@ -17,8 +17,8 @@ export default function Account() {
   });
   const [showChangePassword, setShowChangePassword] = useState(false);
   const navigate = useNavigate();
-
   const token = localStorage.getItem('token');
+
   const handleChangePassword = async () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
       setMessage('Passwords do not match');
@@ -39,9 +39,7 @@ export default function Account() {
   };
 
   useEffect(() => {
-    if (userData) {
-      setListings(userData.listings);
-    }
+    if (userData) setListings(userData.listings);
   }, [userData]);
 
   return (
@@ -50,7 +48,6 @@ export default function Account() {
         {userData && (
           <Typography variant="h4">Hi, {userData.username}!</Typography>
         )}
-
         {message && (
           <Typography
             color={
@@ -60,7 +57,6 @@ export default function Account() {
             {message}
           </Typography>
         )}
-
         <Button
           variant="outlined"
           onClick={() => setShowChangePassword((prev) => !prev)}
@@ -68,7 +64,6 @@ export default function Account() {
         >
           {showChangePassword ? 'Cancel' : 'Change Password'}
         </Button>
-
         {userData?.admin && (
           <Button
             variant="contained"

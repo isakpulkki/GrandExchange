@@ -20,22 +20,14 @@ const Listing: React.FC<ListingType> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(`/listings/${id}`);
-  };
-
+  const handleClick = () => navigate(`/listings/${id}`);
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    if (handleDelete) {
-      handleDelete(id);
-    }
+    handleDelete?.(id);
   };
-
   const handleApproveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    if (handleApprove) {
-      handleApprove(id);
-    }
+    handleApprove?.(id);
   };
 
   return (
@@ -58,21 +50,14 @@ const Listing: React.FC<ListingType> = ({
         <Typography
           variant="h6"
           gutterBottom
-          sx={{
-            wordWrap: 'break-word',
-            wordBreak: 'break-all',
-          }}
+          sx={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
         >
           {title}
         </Typography>
-
         <ImageBox image={image} />
         <Typography
           gutterBottom
-          sx={{
-            wordWrap: 'break-word',
-            wordBreak: 'break-all',
-          }}
+          sx={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
         >
           {description.length > 100
             ? `${description.substring(0, 100)}...`
@@ -94,14 +79,12 @@ const Listing: React.FC<ListingType> = ({
               <DoneIcon />
             </IconButton>
           )}
-
           {handleDelete && (
             <IconButton onClick={handleDeleteClick} color="error">
               <Delete />
             </IconButton>
           )}
         </Box>
-
         {user && !handleDelete && (
           <Typography variant="body2" color="textSecondary">
             Added by <span style={{ fontStyle: 'italic' }}>{user}</span>

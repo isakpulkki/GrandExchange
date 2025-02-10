@@ -27,52 +27,34 @@ function NavigationBar() {
 
   const token = localStorage.getItem('token');
 
-  let navItems;
-
-  if (token) {
-    navItems = [
-      { label: 'Listings', path: '/' },
-      { label: 'New Listing', path: '/newlisting' },
-      { label: 'My Account', path: '/account' },
-      { label: 'Messages', path: '/messages' },
-      { label: 'Log Out', path: '/logout' },
-    ];
-  } else {
-    navItems = [
-      { label: 'Listings', path: '/' },
-      { label: 'Log In', path: '/login' },
-      { label: 'Register', path: '/register' },
-    ];
-  }
+  const navItems = token
+    ? [
+        { label: 'Listings', path: '/' },
+        { label: 'New Listing', path: '/newlisting' },
+        { label: 'My Account', path: '/account' },
+        { label: 'Messages', path: '/messages' },
+        { label: 'Log Out', path: '/logout' },
+      ]
+    : [
+        { label: 'Listings', path: '/' },
+        { label: 'Log In', path: '/login' },
+        { label: 'Register', path: '/register' },
+      ];
 
   return (
-    <AppBar
-      position="static"
-      sx={{
-        minHeight: '5vh',
-      }}
-    >
+    <AppBar position="static" sx={{ minHeight: '5vh' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h5"
             noWrap
             onClick={() => navigate('/')}
-            sx={{
-              flexGrow: 1,
-              mr: 2,
-              color: 'inherit',
-              cursor: 'pointer',
-            }}
+            sx={{ flexGrow: 1, mr: 2, color: 'inherit', cursor: 'pointer' }}
           >
             <StorefrontIcon sx={{ mr: 0.8, mt: 0.4, cursor: 'pointer' }} />
             GrandExchange
           </Typography>
-          <Box
-            sx={{
-              display: { xs: 'flex', md: 'none' },
-            }}
-          >
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton onClick={handleOpenNavMenu} color="inherit">
               <MenuIcon />
             </IconButton>

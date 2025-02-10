@@ -19,21 +19,18 @@ export default function ConversationPage() {
   useEffect(() => {
     const fetchConversation = async () => {
       const response = await fetch(`/api/messages/${participant}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setConversation({
-            messages: data.messages,
-          });
+          setConversation({ messages: data.messages });
         }
       }
       setLoading(false);
     };
+
     fetchConversation();
     const intervalId = setInterval(fetchConversation, 1000);
     return () => clearInterval(intervalId);
@@ -46,18 +43,14 @@ export default function ConversationPage() {
         JSON.stringify(prevMessagesRef.current) !==
         JSON.stringify(currentMessages)
       ) {
-        if (messagesEndRef.current) {
-          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         prevMessagesRef.current = currentMessages;
       }
     }
   }, [conversation]);
 
   const handleNewMessage = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   if (loading) {
@@ -73,14 +66,7 @@ export default function ConversationPage() {
       <Typography variant="h4">
         Conversation with <i>{participant}</i>
       </Typography>
-      <Box
-        sx={{
-          flex: 1,
-          overflowY: 'auto',
-          maxHeight: '45vh',
-          padding: 1,
-        }}
-      >
+      <Box sx={{ flex: 1, overflowY: 'auto', maxHeight: '45vh', padding: 1 }}>
         {conversation ? (
           <>
             {conversation.messages.map((msg) => (
@@ -102,10 +88,7 @@ export default function ConversationPage() {
               >
                 <Typography
                   variant="body1"
-                  sx={{
-                    wordWrap: 'break-word',
-                    wordBreak: 'break-all',
-                  }}
+                  sx={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
                   gutterBottom
                 >
                   {userData && msg.sender === userData.username

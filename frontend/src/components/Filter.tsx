@@ -7,43 +7,34 @@ const Filter: React.FC<FilterProps> = ({
   selectedCategory,
   onCategoryChange,
   newListing = false,
-}) => {
-  return (
-    <FormControl required={newListing} sx={{ minWidth: 130 }}>
-      <InputLabel id="category-label">Select a Category</InputLabel>
-      <Select
-        labelId="category-label"
-        value={selectedCategory}
-        onChange={(e) => onCategoryChange(e.target.value)}
-        label="Select a Category"
-      >
-        {!newListing && (
-          <MenuItem
-            value="All"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '35vh',
-            }}
-          >
-            All
-          </MenuItem>
-        )}
-        {categories.map((category) => (
-          <MenuItem
-            key={category.id}
-            value={category.name}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            {category.name}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
+}) => (
+  <FormControl required={newListing} sx={{ minWidth: 130 }}>
+    <InputLabel id="category-label">Select a Category</InputLabel>
+    <Select
+      labelId="category-label"
+      value={selectedCategory}
+      onChange={(e) => onCategoryChange(e.target.value)}
+      label="Select a Category"
+    >
+      {!newListing && (
+        <MenuItem
+          value="All"
+          sx={{ display: 'flex', justifyContent: 'center', width: '35vh' }}
+        >
+          All
+        </MenuItem>
+      )}
+      {categories.map((category) => (
+        <MenuItem
+          key={category.id}
+          value={category.name}
+          sx={{ display: 'flex', justifyContent: 'center' }}
+        >
+          {category.name}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+);
 
 export default Filter;

@@ -3,12 +3,12 @@ import { Button, TextField, Typography } from '@mui/material';
 import { LIMITS } from '../config/index';
 import { SendMessageProps } from '../types/sendMessage';
 
-const SendMessage = ({
+const SendMessage: React.FC<SendMessageProps> = ({
   receiver,
   token,
   onMessageSent,
   showMessageFeedback = true,
-}: SendMessageProps) => {
+}) => {
   const [input, setInput] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
@@ -28,18 +28,13 @@ const SendMessage = ({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        receiver,
-        message: input,
-      }),
+      body: JSON.stringify({ receiver, message: input }),
     });
 
     if (response.ok) {
       setInput('');
       setMessage('Message sent successfully!');
-      if (onMessageSent) {
-        onMessageSent(input);
-      }
+      onMessageSent?.(input);
     } else {
       const errorMessage = await response.text();
       setMessage(errorMessage || 'Failed to send message.');
@@ -54,9 +49,9 @@ const SendMessage = ({
         multiline
         rows={showMessageFeedback ? 3 : 2}
         value={input}
-        onChange={(e) => {
-          if (e.target.value.length <= LIMITS.message) setInput(e.target.value);
-        }}
+        onChange={(e) =>
+          e.target.value.length <= LIMITS.message && setInput(e.target.value)
+        }
         variant="outlined"
         helperText={`${input.length}/${LIMITS.message}`}
       />

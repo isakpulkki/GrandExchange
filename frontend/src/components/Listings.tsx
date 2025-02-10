@@ -3,10 +3,10 @@ import { Grid, Typography, Button, Box } from '@mui/material';
 import Listing from './Listing';
 import { Listing as ListingType } from '../types/listing';
 import { ListingsProps } from '../types/listings';
-
 import Filter from './Filter';
 import Sort from './Sort';
 import Search from './Search';
+
 const Listings: React.FC<ListingsProps> = ({
   listings,
   handleDelete,
@@ -75,12 +75,7 @@ const Listings: React.FC<ListingsProps> = ({
   }, [selectedCategory, listings, sortOption, searchTerm]);
 
   const handleShowMore = () => {
-    setVisibleListings((prev) => {
-      const newVisibleListings = prev + 4;
-      return newVisibleListings > filteredListings.length
-        ? filteredListings.length
-        : newVisibleListings;
-    });
+    setVisibleListings((prev) => Math.min(prev + 4, filteredListings.length));
   };
 
   const shouldShowTools = (handleDelete && admin) || (!handleDelete && !admin);
@@ -105,7 +100,6 @@ const Listings: React.FC<ListingsProps> = ({
             />
             <Sort value={sortOption} onChange={setSortOption} />
           </Box>
-
           <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </>
       )}
@@ -129,9 +123,7 @@ const Listings: React.FC<ListingsProps> = ({
                   display: 'flex',
                   justifyContent: 'center',
                   ...(visibleListings % 2 === 1 &&
-                    index === visibleListings - 1 && {
-                      width: '50%',
-                    }),
+                    index === visibleListings - 1 && { width: '50%' }),
                 }}
               >
                 <Listing

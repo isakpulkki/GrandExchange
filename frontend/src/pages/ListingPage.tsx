@@ -14,11 +14,9 @@ const Listing = () => {
 
   useEffect(() => {
     const fetchListing = async () => {
-      const headers: HeadersInit = {};
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
+      const headers: HeadersInit = token
+        ? { Authorization: `Bearer ${token}` }
+        : {};
       const response = await fetch(`/api/listings/${id}`, { headers });
 
       if (response.ok) {
@@ -30,18 +28,21 @@ const Listing = () => {
     fetchListing();
   }, [id, token]);
 
-  if (loading)
+  if (loading) {
     return (
       <CustomBox>
         <Typography variant="h6">Loading...</Typography>
       </CustomBox>
     );
-  if (!listing)
+  }
+
+  if (!listing) {
     return (
       <CustomBox>
         <Typography variant="h6">Listing not found.</Typography>
       </CustomBox>
     );
+  }
 
   return (
     <CustomBox>
@@ -55,7 +56,6 @@ const Listing = () => {
       >
         <span style={{ fontStyle: 'italic' }}>{listing.category}</span>
       </Typography>
-
       <ImageBox image={listing.image} fullSize={true} />
       <Typography gutterBottom sx={{ wordWrap: 'break-word' }}>
         {listing.description}
@@ -73,9 +73,7 @@ const Listing = () => {
       {token ? (
         <SendMessage receiver={listing.user} token={token} />
       ) : (
-        <Typography variant="body1"
-        
-        color="textSecondary">
+        <Typography variant="body1" color="textSecondary">
           <span style={{ fontStyle: 'italic' }}>
             <Link href="/login" color="primary">
               Login

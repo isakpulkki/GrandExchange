@@ -6,11 +6,7 @@ import CustomBox from './CustomBox';
 import type { AuthFormProps } from '../types/authForm';
 
 const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
-  const [formData, setFormData] = useState<{
-    username: string;
-    password: string;
-    confirmPassword?: string;
-  }>({
+  const [formData, setFormData] = useState({
     username: '',
     password: '',
     confirmPassword: '',
@@ -22,21 +18,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     const { name, value } = e.target;
     const regex = /^[A-Za-z0-9!"#€%&/()@]+$/;
     if (regex.test(value) || value === '') {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const { username, password, confirmPassword } = formData;
-    if (type === 'register') {
-      if (password !== confirmPassword) {
-        setError('Passwords do not match. Please try again.');
-        return;
-      }
+    if (type === 'register' && password !== confirmPassword) {
+      setError('Passwords do not match. Please try again.');
+      return;
     }
 
     const url = type === 'login' ? '/api/login' : '/api/users';
@@ -48,14 +39,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       navigate('/');
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        if (err.response?.status === 429) {
-          setError('Too many requests, please wait.');
-        } else {
-          const errorMessage =
-            err.response?.data?.error ||
-            'An unexpected error occurred. Please try again.';
-          setError(errorMessage);
-        }
+        setError(
+          err.response?.status === 429
+            ? 'Too many requests, please wait.'
+            : err.response?.data?.error ||
+                'An unexpected error occurred. Please try again.'
+        );
       } else if (err instanceof Error) {
         setError(
           err.message || 'An unexpected error occurred. Please try again.'
@@ -103,7 +92,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
             fullWidth
             margin="normal"
             name="confirmPassword"
-            value={formData.confirmPassword || ''}
+            value={formData.confirmPassword}
             onChange={handleChange}
             error={formData.password !== formData.confirmPassword}
             helperText={
