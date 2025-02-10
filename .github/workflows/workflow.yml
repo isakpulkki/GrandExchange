@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Create .env file in the backend
         run: echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" > ./backend/.env
