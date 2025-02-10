@@ -94,7 +94,8 @@ describe('When a listing is added by a new user...', () => {
       .get('/api/listings')
       .set({ Authorization: token });
     expect(listings.body).toHaveLength(3);
-    await api.get(`/api/uploads/${response.body.image}`).expect(200);
+    const imageResponse = await api.get(`/api/uploads/${response.body.image}`).expect(200);
+  expect(imageResponse.status).toBe(200);
     await api
       .delete(`/api/listings/${response.body.id}`)
       .set({ Authorization: token })
