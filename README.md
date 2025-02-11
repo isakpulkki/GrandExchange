@@ -5,7 +5,11 @@
 
 This project is a full-stack marketplace application named GrandExchange, built with React, TypeScript, Node.js and MongoDB.
 
-The application enables users to register, explore, search, and manage items for sale, with features like categorized listings and sorting options. Users can update passwords, delete their own listings, and communicate with others via a built-in messaging system. An admin role ensures quality control by reviewing and approving listings, as well as having the authority to delete any listing. The app is fully responsive, delivering a seamless and user-friendly experience.
+The application allows users to register, browse, search, and manage item listings, with options to sort, filter, and categorize listings for easy discovery. Users can update their passwords, delete their own listings, and communicate via a built-in messaging system to facilitate transactions. An admin role ensures quality control by reviewing and approving new listings while having the authority to remove inappropriate content. The application is fully responsive, delivering a seamless and user-friendly experience across all devices.
+
+The backend manages all APIs related to users, listings, and file storage. It implements rate limiting to prevent server overload and mitigate attacks. Strict input validation ensures that data submitted for registration, listings, and other interactions is structured correctly, preserving both UI stability and backend integrity. The API is  tested with Jest, while end-to-end (E2E) testing with Playwright guarantees frontend reliability. Continuous integration automatically tests the application before deployment to the server.
+
+Working hours used for the project can be found [here](https://docs.google.com/spreadsheets/d/1ITfo_6CgIPNVidxxaGicbF7k7e8BUh7Gp4uHst1AI-s/edit?usp=sharing).
 
 ## Instructions
 
