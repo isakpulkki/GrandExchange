@@ -9,8 +9,6 @@ The application allows users to register, browse, search, and manage item listin
 
 The backend manages all APIs related to users, listings, and file storage. It implements rate limiting to prevent server overload and mitigate attacks. Strict input validation ensures that data submitted for registration, listings, and other interactions is structured correctly, preserving both UI stability and backend integrity. The API is  tested with Jest, while end-to-end (E2E) testing with Playwright guarantees frontend reliability. Continuous integration automatically tests the application before deployment to the server.
 
-Working hours used for the project can be found [here](https://docs.google.com/spreadsheets/d/1ITfo_6CgIPNVidxxaGicbF7k7e8BUh7Gp4uHst1AI-s/edit?usp=sharing).
-
 ## Instructions
 
 You can test the application live [here](https://grandexchange.pulkki.me). Accessing admin rights in the application happens with the user in the table above.
